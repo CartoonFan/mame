@@ -67,19 +67,20 @@ DEFINE_DEVICE_TYPE(SENSORBOARD, sensorboard_device, "sensorboard", "Sensorboard"
 
 sensorboard_device::sensorboard_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock) :
 	device_t(mconfig, SENSORBOARD, tag, owner, clock),
-	m_nvram(*this, "position"),
+	device_nvram_interface(mconfig, *this),
 	m_out_piece(*this, "piece_%c%u", 0U + 'a', 1U),
 	m_out_pui(*this, "piece_ui%u", 0U),
 	m_out_count(*this, "count_ui%u", 0U),
 	m_inp_rank(*this, "RANK.%u", 1),
 	m_inp_spawn(*this, "SPAWN"),
 	m_inp_ui(*this, "UI"),
+	m_inp_conf(*this, "CONF"),
 	m_custom_init_cb(*this),
 	m_custom_sensor_cb(*this),
 	m_custom_spawn_cb(*this),
 	m_custom_output_cb(*this)
 {
-	m_nvram_on = false;
+	m_nvram_auto = false;
 	m_nosensors = false;
 	m_magnets = false;
 	m_inductive = false;
@@ -127,9 +128,8 @@ void sensorboard_device::device_start()
 	m_ulast = 0;
 	m_usize = ARRAY_LENGTH(m_history);
 
-	m_nvram->set_base(m_curstate, sizeof(m_curstate));
-
 	// register for savestates
+	save_item(NAME(m_nosensors));
 	save_item(NAME(m_magnets));
 	save_item(NAME(m_inductive));
 	save_item(NAME(m_width));
@@ -152,19 +152,8 @@ void sensorboard_device::device_start()
 	save_item(NAME(m_ufirst));
 	save_item(NAME(m_ulast));
 	save_item(NAME(m_usize));
+	save_item(NAME(m_nvram_auto));
 	save_item(NAME(m_sensordelay));
-}
-
-void sensorboard_device::nvram_init(nvram_device &nvram, void *data, size_t size)
-{
-	clear_board();
-	m_custom_init_cb(1);
-}
-
-void sensorboard_device::device_add_mconfig(machine_config &config)
-{
-	// 'nvram' is the last board position (m_curstate)
-	NVRAM(config, m_nvram).set_custom_handler(FUNC(sensorboard_device::nvram_init));
 }
 
 void sensorboard_device::preset_chess(int state)
@@ -204,13 +193,46 @@ void sensorboard_device::device_reset()
 	cancel_sensor();
 	cancel_hand();
 
-	if (!m_nvram_on)
+	if (!nvram_on())
 	{
 		clear_board();
 		m_custom_init_cb(0);
 	}
 	undo_reset();
 	refresh();
+}
+
+
+
+//-------------------------------------------------
+//  device_nvram_interface overrides
+//-------------------------------------------------
+
+void sensorboard_device::nvram_default()
+{
+	clear_board();
+	m_custom_init_cb(1);
+}
+
+void sensorboard_device::nvram_read(emu_file &file)
+{
+	file.read(m_curstate, sizeof(m_curstate));
+}
+
+void sensorboard_device::nvram_write(emu_file &file)
+{
+	// save last board position
+	file.write(m_curstate, sizeof(m_curstate));
+}
+
+bool sensorboard_device::nvram_can_write()
+{
+	return nvram_on();
+}
+
+bool sensorboard_device::nvram_on()
+{
+	return (m_inp_conf->read() & 3) ? bool(m_inp_conf->read() & 2) : m_nvram_auto;
 }
 
 
@@ -315,7 +337,7 @@ void sensorboard_device::refresh()
 	for (int x = 0; x < m_width; x++)
 		for (int y = 0; y < m_height; y++)
 		{
-			u8 piece = read_piece(x, y);
+			u8 piece = (m_inp_conf->read() & 4) ? 0 : read_piece(x, y);
 			int pos = (y << 4 & 0xf0) | (x & 0x0f);
 
 			// selected piece: m_maxid + piece id
@@ -786,6 +808,15 @@ static INPUT_PORTS_START( sensorboard )
 
 	PORT_START("UI_CHECK") // UI enabled (internal use)
 	PORT_BIT( 0x03, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(sensorboard_device, check_ui_enabled)
+
+	PORT_START("CONF")
+	PORT_CONFNAME( 0x03, 0x00, "Remember Position" )
+	PORT_CONFSETTING(    0x01, DEF_STR( No ) )
+	PORT_CONFSETTING(    0x02, DEF_STR( Yes ) )
+	PORT_CONFSETTING(    0x00, "Auto" )
+	PORT_CONFNAME( 0x04, 0x00, "Show Pieces" ) PORT_CHANGED_MEMBER(DEVICE_SELF, sensorboard_device, ui_refresh, 0)
+	PORT_CONFSETTING(    0x04, DEF_STR( No ) )
+	PORT_CONFSETTING(    0x00, DEF_STR( Yes ) )
 INPUT_PORTS_END
 
 ioport_constructor sensorboard_device::device_input_ports() const
