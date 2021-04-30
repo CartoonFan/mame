@@ -10,7 +10,10 @@
 
 #include "emu.h"
 #include "drivenum.h"
+
+#include "corestr.h"
 #include "softlist_dev.h"
+#include "unicode.h"
 
 #include <algorithm>
 
