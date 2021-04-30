@@ -33,6 +33,10 @@
       "test": "tests"
    },
    "dependencies": {
+<<<<<<< HEAD
       "nan": "~1.9.0"
+=======
+      "nan": "~2.14.2"
+>>>>>>> 3b6865bea65cf2d8658f22a7c18854483c7eb3f1
    }
 }
