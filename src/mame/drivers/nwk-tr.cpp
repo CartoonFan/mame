@@ -276,14 +276,16 @@ Thrill Drive 713A13  -       713A14  -
 #include "machine/konppc.h"
 #include "machine/timekpr.h"
 //#include "machine/x76f041.h"
-#include "sound/rf5c400.h"
 #include "sound/k056800.h"
-#include "video/voodoo.h"
+#include "sound/rf5c400.h"
 #include "video/k001604.h"
+#include "video/voodoo.h"
 #include "emupal.h"
 #include "screen.h"
 #include "speaker.h"
 
+
+namespace {
 
 class nwktr_state : public driver_device
 {
@@ -644,9 +646,9 @@ void nwktr_state::lanc2_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 	{
 		// TODO: The data below would normally be present on the serialflash at 2G.
 
-		if (core_stricmp(machine().system().name, "thrilld") == 0 ||
-			core_stricmp(machine().system().name, "thrilldb") == 0 ||
-			core_stricmp(machine().system().name, "thrilldbe") == 0)
+		if (strcmp(machine().system().name, "thrilld") == 0 ||
+			strcmp(machine().system().name, "thrilldb") == 0 ||
+			strcmp(machine().system().name, "thrilldbe") == 0)
 		{
 			m_work_ram[(0x3ffed0/4) + 0] = 0x472a3731;      // G*71
 			m_work_ram[(0x3ffed0/4) + 1] = 0x33202020;      // 3
@@ -658,7 +660,7 @@ void nwktr_state::lanc2_w(offs_t offset, uint32_t data, uint32_t mem_mask)
 			m_work_ram[(0x3fff40/4) + 2] = 0x19994a41;      //   JA
 			m_work_ram[(0x3fff40/4) + 3] = 0x4100a9b1;      // A
 		}
-		else if (core_stricmp(machine().system().name, "racingj2") == 0)
+		else if (strcmp(machine().system().name, "racingj2") == 0)
 		{
 			m_work_ram[(0x3ffc80/4) + 0] = 0x47453838;      // GE88
 			m_work_ram[(0x3ffc80/4) + 1] = 0x38003030;      // 8 00
@@ -1165,6 +1167,32 @@ ROM_START(thrilldbe)
 	ROM_LOAD( "713eaa_m48t58y.35d", 0x000000, 0x002000, CRC(056ea8fa) SHA1(23574e0c1d011dab8644f3d98763d4a2d11a05b3)  )
 ROM_END
 
+ROM_START(thrilldbu) // GE713UF sticker, does not have the chip at 2G since it uses the rev A network board
+	ROM_REGION32_BE(0x200000, "user1", 0) // PowerPC program roms
+	ROM_LOAD16_WORD_SWAP("713ab01.27p", 0x000000, 0x200000, CRC(a005d728) SHA1(8e265b1bb3adb7db2d342d3c0e3361a7174cb54d) )
+
+	ROM_REGION32_BE(0x800000, "user2", 0) // Data roms
+	ROM_LOAD32_WORD_SWAP("713a04.16t", 0x000000, 0x200000, CRC(c994aaa8) SHA1(d82b9930a11e5384ad583684a27c95beec03cd5a) )
+	ROM_LOAD32_WORD_SWAP("713a05.14t", 0x000002, 0x200000, CRC(6f1e6802) SHA1(91f8a170327e9b4ee6a64aee0c106b981a317e69) )
+
+	ROM_REGION32_BE(0x800000, "user5", 0) // CG Board texture roms
+	ROM_LOAD32_WORD_SWAP( "713a13.8x",  0x000000, 0x400000, CRC(b795c66b) SHA1(6e50de0d5cc444ffaa0fec7ada8c07f643374bb2) )
+	ROM_LOAD32_WORD_SWAP( "713a14.16x", 0x000002, 0x400000, CRC(5275a629) SHA1(16fadef06975f0f3625cac8f84e2e77ed7d75e15) )
+
+	ROM_REGION(0x80000, "audiocpu", 0) // 68k program roms
+	ROM_LOAD16_WORD_SWAP( "713a08.7s", 0x000000, 0x080000, CRC(6a72a825) SHA1(abeac99c5343efacabcb0cdff6d34f9f967024db) )
+
+	ROM_REGION16_LE(0x1000000, "rfsnd", 0) // PCM sample roms
+	ROM_LOAD( "713a09.16p", 0x000000, 0x400000, CRC(058f250a) SHA1(63b8e60004ec49009633e86b4992c00083def9a8) )
+	ROM_LOAD( "713a10.14p", 0x400000, 0x400000, CRC(27f9833e) SHA1(1540f00d2571ecb81b914c553682b67fca94bbbd) )
+
+	ROM_REGION(0x2000, "m48t58",0)
+	ROM_LOAD( "713uab_m48t58y.35d", 0x000000, 0x002000, NO_DUMP )
+ROM_END
+
+} // Anonymous namespace
+
+
 /*****************************************************************************/
 
 #define GAME_FLAGS (MACHINE_NOT_WORKING | MACHINE_IMPERFECT_GRAPHICS | MACHINE_IMPERFECT_SOUND | MACHINE_NODEVICE_LAN )
@@ -1175,3 +1203,4 @@ GAME( 1998, racingj2j,  racingj, nwktr,   nwktr, nwktr_state, init_racingj, ROT0
 GAME( 1998, thrilld,    0,       thrilld, nwktr, nwktr_state, init_thrilld, ROT0, "Konami", "Thrill Drive (JAE)",          GAME_FLAGS )
 GAME( 1998, thrilldb,   thrilld, thrilld, nwktr, nwktr_state, init_thrilld, ROT0, "Konami", "Thrill Drive (JAB)",          GAME_FLAGS )
 GAME( 1998, thrilldbe,  thrilld, thrilld, nwktr, nwktr_state, init_thrilld, ROT0, "Konami", "Thrill Drive (EAB)",          GAME_FLAGS )
+GAME( 1998, thrilldbu,  thrilld, thrilld, nwktr, nwktr_state, init_thrilld, ROT0, "Konami", "Thrill Drive (?AB)",          GAME_FLAGS ) // needs m48t58 dump, version to be verified when it boots

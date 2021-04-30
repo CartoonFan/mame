@@ -6,20 +6,22 @@
 
     Tobacco vending machines
 
-	Hardware:
-	- Intel P8051
-	- 27C256 EPROM
-	- NEC D446C-2 SRAM
-	- OKI M62X428 RTC
-	- Rockwell 10937P-50 A8201-17 display controller
+    Hardware:
+    - Intel P8051
+    - 27C256 EPROM
+    - NEC D446C-2 SRAM
+    - OKI M62X428 RTC
+    - Rockwell 10937P-50 A8201-17 display controller
 
     TODO:
-	- The coin mech isn't emulated
+    - The coin mech isn't emulated. It's an Azkoyen L66S coin selector,
+      which uses a PIC16C76/PIC16F76 (undumped).
 
 ***************************************************************************/
 
 #include "emu.h"
 #include "cpu/mcs51/mcs51.h"
+#include "machine/74259.h"
 #include "machine/bankdev.h"
 #include "machine/msm6242.h"
 #include "machine/nvram.h"
@@ -84,13 +86,14 @@ void design6_state::io_map(address_map &map)
 void design6_state::iobanked_map(address_map &map)
 {
 	map(0x00000, 0x00000).portr("in0");
-//	map(0x00000, 0x00007).w // coin return motor
+	map(0x00000, 0x00007).w("outlatch0", FUNC(cd4099_device::write_d0));
 	map(0x00010, 0x00010).portr("in1");
-	map(0x00015, 0x00015).lw8(NAME([this] (uint8_t data) { m_vfd->data(BIT(data, 0)); }));
-	map(0x00016, 0x00016).lw8(NAME([this] (uint8_t data) { m_vfd->sclk(BIT(data, 0)); }));
-	map(0x00017, 0x00017).lw8(NAME([this] (uint8_t data) { m_vfd->por(BIT(data, 0)); }));
+	map(0x00010, 0x00017).w("outlatch1", FUNC(cd4099_device::write_d0));
 	map(0x00020, 0x00020).r(FUNC(design6_state::in2_r));
+	map(0x00020, 0x00027).w("outlatch2", FUNC(cd4099_device::write_d0));
 	map(0x00030, 0x00030).portr("in3");
+	map(0x00030, 0x00037).w("outlatch3", FUNC(cd4099_device::write_d0));
+	map(0x00040, 0x00047).w("outlatch4", FUNC(cd4099_device::write_d0));
 	map(0x00060, 0x0006f).rw("rtc", FUNC(msm6242_device::read), FUNC(msm6242_device::write));
 	map(0x10000, 0x107ff).ram().share("nvram");
 }
@@ -270,6 +273,22 @@ void design6_state::design6(machine_config &config)
 
 	NVRAM(config, "nvram", nvram_device::DEFAULT_ALL_0);
 
+	CD4099(config, "outlatch0");
+//  outlatch0.q_out_cb<0>() // enable coin return motor 1
+//  outlatch0.q_out_cb<1>() // enable coin return motor 2
+//  outlatch0.q_out_cb<2>() // enable coin return motor 3
+//  outlatch0.q_out_cb<3>() // master enable coin return motor?
+//  outlatch0.q_out_cb<6>() // ?
+
+	cd4099_device &outlatch1(CD4099(config, "outlatch1"));
+	outlatch1.q_out_cb<5>().set("vfd", FUNC(roc10937_device::data));
+	outlatch1.q_out_cb<6>().set("vfd", FUNC(roc10937_device::sclk));
+	outlatch1.q_out_cb<7>().set("vfd", FUNC(roc10937_device::por));
+
+	CD4099(config, "outlatch2");
+	CD4099(config, "outlatch3");
+	CD4099(config, "outlatch4");
+
 	ROC10937(config, m_vfd);
 
 	MSM6242(config, "rtc", 32.768_kHz_XTAL);
@@ -285,11 +304,17 @@ void design6_state::design6(machine_config &config)
 ROM_START( design6 )
 	ROM_REGION(0x8000, "maincpu", 0)
 	ROM_LOAD("1.bin", 0x0000, 0x8000, CRC(1155999c) SHA1(2896af89011c496f905ed0e57d7035a3b612c718))
+
+	ROM_REGION(0x4000, "coinsel", 0)
+	ROM_LOAD("pic16x76_l56s-l66s.bin", 0x0000, 0x4000, NO_DUMP)
 ROM_END
 
 ROM_START( designe )
 	ROM_REGION(0x8000, "maincpu", 0)
 	ROM_LOAD("designe.bin", 0x0000, 0x8000, CRC(693d40bd) SHA1(9596bbf9c367bc919393923460da15563d9447ca))
+
+	ROM_REGION(0x4000, "coinsel", 0)
+	ROM_LOAD("pic16x76_l56s-l66s.bin", 0x0000, 0x4000, NO_DUMP)
 ROM_END
 
 
