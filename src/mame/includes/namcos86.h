@@ -40,6 +40,10 @@ public:
 
 	void init_namco86();
 
+protected:
+	virtual void machine_start() override;
+	virtual void video_start() override;
+
 private:
 	void bankswitch1_w(uint8_t data);
 	void bankswitch1_ext_w(uint8_t data);
@@ -53,15 +57,15 @@ private:
 	void coin_w(uint8_t data);
 	void led_w(uint8_t data);
 	void cus115_w(offs_t offset, uint8_t data);
-	void videoram1_w(offs_t offset, uint8_t data);;
-	void videoram2_w(offs_t offset, uint8_t data);;
-	void tilebank_select_w(offs_t offset, uint8_t data);;
-	void scroll0_w(offs_t offset, uint8_t data);;
-	void scroll1_w(offs_t offset, uint8_t data);;
-	void scroll2_w(offs_t offset, uint8_t data);;
-	void scroll3_w(offs_t offset, uint8_t data);;
-	void backcolor_w(uint8_t data);;
-	void spriteram_w(offs_t offset, uint8_t data);;
+	void videoram1_w(offs_t offset, uint8_t data);
+	void videoram2_w(offs_t offset, uint8_t data);
+	void tilebank_select_w(offs_t offset, uint8_t data);
+	void scroll0_w(offs_t offset, uint8_t data);
+	void scroll1_w(offs_t offset, uint8_t data);
+	void scroll2_w(offs_t offset, uint8_t data);
+	void scroll3_w(offs_t offset, uint8_t data);
+	void backcolor_w(uint8_t data);
+	void spriteram_w(offs_t offset, uint8_t data);
 
 	TILE_GET_INFO_MEMBER(get_tile_info0);
 	TILE_GET_INFO_MEMBER(get_tile_info1);
@@ -87,9 +91,6 @@ private:
 	void rthunder_mcu_map(address_map &map);
 	void wndrmomo_cpu2_map(address_map &map);
 	void wndrmomo_mcu_map(address_map &map);
-
-	virtual void machine_start() override;
-	virtual void video_start() override;
 
 	required_device<cpu_device> m_cpu1;
 	required_device<cpu_device> m_cpu2;

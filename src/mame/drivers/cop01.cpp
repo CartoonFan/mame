@@ -59,11 +59,10 @@ Mighty Guy board layout:
 
 #include "cpu/z80/z80.h"
 #include "sound/ay8910.h"
-#include "sound/3526intf.h"
+#include "sound/ym3526.h"
 #include "screen.h"
 #include "speaker.h"
 #include "sound/dac.h"
-#include "sound/volt_reg.h"
 
 
 #define MIGHTGUY_HACK    0
@@ -519,9 +518,6 @@ void mightguy_state::mightguy(machine_config &config)
 	YM3526(config, "ymsnd", AUDIOCPU_CLOCK/2).add_route(ALL_OUTPUTS, "mono", 1.0); /* unknown divider */
 
 	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "mono", 0.5); // unknown DAC
-	voltage_regulator_device &vref(VOLTAGE_REGULATOR(config, "vref"));
-	vref.add_route(0, "dac", 1.0, DAC_VREF_POS_INPUT);
-	vref.add_route(0, "dac", -1.0, DAC_VREF_NEG_INPUT);
 }
 
 

@@ -236,7 +236,6 @@ Todo:
 #include "machine/watchdog.h"
 #include "sound/dac.h"
 #include "sound/tms5220.h"
-#include "sound/volt_reg.h"
 #include "speaker.h"
 
 #include "polepos.lh"
@@ -251,7 +250,7 @@ Todo:
 /* Pole Position II protection                                                       */
 /*************************************************************************************/
 
-READ16_MEMBER(polepos_state::polepos2_ic25_r)
+uint16_t polepos_state::polepos2_ic25_r(offs_t offset)
 {
 	int result;
 	/* protection states */
@@ -280,7 +279,7 @@ uint8_t polepos_state::analog_r()
 	return ioport(m_adc_input ? "ACCEL" : "BRAKE")->read();
 }
 
-READ8_MEMBER(polepos_state::ready_r)
+uint8_t polepos_state::ready_r()
 {
 	int ret = 0xff;
 
@@ -303,7 +302,7 @@ WRITE_LINE_MEMBER(polepos_state::sb0_w)
 	m_auto_start_mask = !state;
 }
 
-template<bool sub1> WRITE16_MEMBER(polepos_state::z8002_nvi_enable_w)
+template<bool sub1> void polepos_state::z8002_nvi_enable_w(uint16_t data)
 {
 	data &= 1;
 
@@ -953,7 +952,7 @@ void polepos_state::polepos(machine_config &config)
 	polepos.add_route(ALL_OUTPUTS, "rspeaker", 0.90 * 0.77);
 }
 
-WRITE8_MEMBER(polepos_state::bootleg_soundlatch_w)
+void polepos_state::bootleg_soundlatch_w(uint8_t data)
 {
 	if (m_soundlatch.found()) // topracern also uses this; no idea what it should do there
 		m_soundlatch->write(data | 0xfc);
@@ -1058,10 +1057,6 @@ void polepos_state::topracern(machine_config &config)
 	dac_4bit_r2r_device &dac(DAC_4BIT_R2R(config, "dac", 0)); // unknown resistor configuration
 	dac.add_route(ALL_OUTPUTS, "lspeaker", 0.12);
 	dac.add_route(ALL_OUTPUTS, "rspeaker", 0.12);
-
-	voltage_regulator_device &vref(VOLTAGE_REGULATOR(config, "vref", 0));
-	vref.add_route(0, "dac", 1.0, DAC_VREF_POS_INPUT);
-	vref.add_route(0, "dac", -1.0, DAC_VREF_NEG_INPUT);
 }
 
 void polepos_state::polepos2bi(machine_config &config)
@@ -2451,7 +2446,7 @@ ROM_END
 void polepos_state::init_polepos2()
 {
 	/* note that the bootleg version doesn't need this custom IC; it has a hacked ROM in its place */
-	m_subcpu->space(AS_PROGRAM).install_read_handler(0x4000, 0x5fff, read16_delegate(*this, FUNC(polepos_state::polepos2_ic25_r)));
+	m_subcpu->space(AS_PROGRAM).install_read_handler(0x4000, 0x5fff, read16sm_delegate(*this, FUNC(polepos_state::polepos2_ic25_r)));
 }
 
 

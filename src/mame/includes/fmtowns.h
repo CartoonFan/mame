@@ -18,14 +18,16 @@
 #include "machine/wd_fdc.h"
 #include "machine/i8251.h"
 #include "machine/msm58321.h"
-#include "sound/2612intf.h"
 #include "sound/cdda.h"
 #include "sound/rf5c68.h"
 #include "sound/spkrdev.h"
+#include "sound/ym2612.h"
 
 #include "bus/generic/carts.h"
 #include "bus/generic/slot.h"
 #include "bus/rs232/rs232.h"
+#include "bus/fmt_scsi/fmt_scsi.h"
+#include "bus/fmt_scsi/fmt121.h"
 
 #include "formats/fmtowns_dsk.h"
 
@@ -111,6 +113,7 @@ class towns_state : public driver_device
 		, m_dma_1(*this, "dma_1")
 		, m_cdrom(*this, "cdrom")
 		, m_cdda(*this, "cdda")
+		, m_scsi_slot(*this, "scsislot")
 		, m_bank_cb000_r(*this, "bank_cb000_r")
 		, m_bank_cb000_w(*this, "bank_cb000_w")
 		, m_bank_f8000_r(*this, "bank_f8000_r")
@@ -150,12 +153,16 @@ protected:
 	void pcm_mem(address_map &map);
 	void towns16_io(address_map &map);
 	void towns_io(address_map &map);
+	void towns_1g_io(address_map &map);
 	void towns2_io(address_map &map);
 	void townsux_io(address_map &map);
 	void towns_mem(address_map &map);
 	void ux_mem(address_map &map);
 
 	virtual void driver_start() override;
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 
 	required_device<ram_device> m_ram;
 	required_device<cpu_device> m_maincpu;
@@ -163,12 +170,10 @@ protected:
 	required_device_array<upd71071_device, 2> m_dma;
 	optional_device<fmscsi_device> m_scsi;
 	required_device_array<floppy_connector, 2> m_flop;
-	DECLARE_FLOPPY_FORMATS(floppy_formats);
+	static void floppy_formats(format_registration &fr);
 
 	DECLARE_WRITE_LINE_MEMBER(towns_scsi_irq);
 	DECLARE_WRITE_LINE_MEMBER(towns_scsi_drq);
-	uint16_t towns_scsi_dma_r();
-	void towns_scsi_dma_w(uint16_t data);
 
 private:
 	/* devices */
@@ -187,6 +192,7 @@ private:
 	required_device<upd71071_device> m_dma_1;
 	required_device<cdrom_image_device> m_cdrom;
 	required_device<cdda_device> m_cdda;
+	optional_device<fmt_scsi_slot_device> m_scsi_slot;
 
 	required_memory_bank m_bank_cb000_r;
 	required_memory_bank m_bank_cb000_w;
@@ -273,9 +279,6 @@ private:
 	optional_shared_ptr<uint32_t> m_nvram;
 	optional_shared_ptr<uint16_t> m_nvram16;
 
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
-	virtual void video_start() override;
 	uint32_t screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);
 	virtual void device_timer(emu_timer &timer, device_timer_id id, int param, void *ptr) override;
 
@@ -454,8 +457,10 @@ class marty_state : public towns_state
 		: towns_state(mconfig, type, tag)
 	{ }
 
-	virtual void driver_start() override;
 	void marty(machine_config &config);
+
+protected:
+	virtual void driver_start() override;
 };
 
 #endif // MAME_INCLUDES_FMTOWNS_H

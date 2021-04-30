@@ -26,7 +26,8 @@ Known modules (*denotes undumped):
 - CB9: Challenger Book Openings 1 - 8KB (label not known)
 - CB16: Challenger Book Openings 2 - 8+8KB 101-1042A01,02
 - *CG64: 64 Greatest Games
-- *EOA-EOE: Challenger Book Openings - Chess Encyclopedia A-E (5 modules)
+- *EOA-EOE: Challenger Book Openings: Chess Encyclopedia Volume A-E (5 modules)
+- *TDF: Challenger Book Openings: Tarrasch Defense to the Queen's Gambit
 
 The edge connector has D0-D7, A0-A13, 2 chip select lines, read/write lines, IRQ line.
 IRQ and write strobe are unused. Maximum known size is 16KB.
@@ -34,21 +35,21 @@ IRQ and write strobe are unused. Maximum known size is 16KB.
 ******************************************************************************/
 
 #include "emu.h"
+
+#include "bus/generic/slot.h"
+#include "bus/generic/carts.h"
 #include "cpu/m6502/m6502.h"
 #include "machine/sensorboard.h"
 #include "machine/timer.h"
 #include "sound/dac.h"
-#include "sound/volt_reg.h"
 #include "video/pwm.h"
-#include "bus/generic/slot.h"
-#include "bus/generic/carts.h"
 
 #include "softlist.h"
 #include "speaker.h"
 
 // internal artwork
-#include "fidel_playmatic.lh" // clickable
-#include "fidel_sc9.lh" // clickable
+#include "fidel_playmatic.lh"
+#include "fidel_sc9.lh"
 
 
 namespace {
@@ -100,16 +101,12 @@ protected:
 	u8 input_r();
 	u8 input_d7_r(offs_t offset);
 
-	u8 m_inp_mux;
-	u8 m_led_data;
+	u8 m_inp_mux = 0;
+	u8 m_led_data = 0;
 };
 
 void sc9_state::machine_start()
 {
-	// zerofill
-	m_inp_mux = 0;
-	m_led_data = 0;
-
 	// register for savestates
 	save_item(NAME(m_inp_mux));
 	save_item(NAME(m_led_data));
@@ -278,7 +275,6 @@ void sc9_state::sc9d(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "speaker").front_center();
 	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.25);
-	VOLTAGE_REGULATOR(config, "vref").add_route(0, "dac", 1.0, DAC_VREF_POS_INPUT);
 
 	/* cartridge */
 	GENERIC_CARTSLOT(config, "cartslot", generic_plain_slot, "fidel_scc");

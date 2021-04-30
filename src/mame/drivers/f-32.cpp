@@ -30,8 +30,8 @@ f5
 #include "emu.h"
 #include "cpu/e132xs/e132xs.h"
 #include "machine/eepromser.h"
-#include "sound/ym2151.h"
 #include "sound/okim6295.h"
+#include "sound/ym2151.h"
 #include "emupal.h"
 #include "screen.h"
 #include "speaker.h"
@@ -67,17 +67,15 @@ private:
 
 uint32_t mosaicf2_state::screen_update_mosaicf2(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect)
 {
-	offs_t offs;
-
-	for (offs = 0; offs < 0x10000; offs++)
+	for (offs_t offs = 0; offs < 0x10000; offs++)
 	{
 		int y = offs >> 8;
 		int x = offs & 0xff;
 
 		if ((x < 0xa0) && (y < 0xe0))
 		{
-			bitmap.pix16(y, (x * 2) + 0) = (m_videoram[offs] >> 16) & 0x7fff;
-			bitmap.pix16(y, (x * 2) + 1) = (m_videoram[offs] >>  0) & 0x7fff;
+			bitmap.pix(y, (x * 2) + 0) = (m_videoram[offs] >> 16) & 0x7fff;
+			bitmap.pix(y, (x * 2) + 1) = (m_videoram[offs] >>  0) & 0x7fff;
 		}
 	}
 

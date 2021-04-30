@@ -44459,10 +44459,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones And The Fate Of Atlantis (UK) (2 faces) (1993) [Original].zip... --> <!-- CPC Power -->
-	<software name="indianaj" supported="no">
+	<!-- Incorrect layout on track 1 head 0, doesn't load -->
+	<software name="indyfate" supported="no">
 		<description>Indiana Jones and the Fate of Atlantis (UK) (2 faces) [Original]</description>
 		<year>1993</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="343552">
 				<rom name="indiana jones and the fate of atlantis (uk) (face a) (1993) [original].dsk" size="343552" crc="751d765a" sha1="e1f6164599de4c2da12f8ae3359e0b6431289de8"/>
@@ -44476,10 +44477,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones And The Fate Of Atlantis (UK) (2 faces) (1993).zip... --> <!-- CPC Power -->
-	<software name="indianaj01" cloneof="indianaj" supported="no">
+	<software name="indyfate01" cloneof="indyfate" supported="yes">
 		<description>Indiana Jones and the Fate of Atlantis (UK) (2 faces)</description>
 		<year>1993</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana jones and the fate of atlantis (uk) (face a) (1993).dsk" size="194816" crc="f4e12234" sha1="ffff92addc22d55c89ff5429d2600bd23b0f650c"/>
@@ -44493,10 +44494,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones And The Last Crusade (UK) (1989) (v1) [Original].zip... --> <!-- CPC Power -->
-	<software name="indianaj02" cloneof="indianaj" supported="no">
+	<!-- Disk 1 has 45 tracks, doesn't load -->
+	<software name="indycrus" supported="no">
 		<description>Indiana Jones and the Last Crusade (UK) (v1) [Original]</description>
 		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="214016">
 				<rom name="indiana jones and the last crusade (uk) (1989) (v1) [original].dsk" size="214016" crc="98a90b12" sha1="7c9ad6e92fe1d59c18f8109658222ae09096ad0f"/>
@@ -44510,10 +44512,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones And The Last Crusade (UK) (1989) (v2) [Original].zip... --> <!-- CPC Power -->
-	<software name="indianaj03" cloneof="indianaj" supported="no">
+	<!-- Incorrect layour on track 1 head 0, doesn't load -->
+	<software name="indycrus01" cloneof="indycrus" supported="no">
 		<description>Indiana Jones and the Last Crusade (UK) (v2) [Original]</description>
 		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="335104">
 				<rom name="indiana jones and the last crusade (uk) (1989) (v2) [original].dsk" size="335104" crc="c30a1b9d" sha1="95733aff4efb74a5c0dec382410c475d11f15916"/>
@@ -44522,10 +44525,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones And The Last Crusade (UK) (1989).zip... --> <!-- CPC Power -->
-	<software name="indianaj04" cloneof="indianaj" supported="no">
+	<!-- Disk image has 60 tracks, likely double-sided image -->
+	<software name="indycrus02" cloneof="indycrus" supported="no">
 		<description>Indiana Jones and the Last Crusade (UK)</description>
 		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="292096">
 				<rom name="indiana jones and the last crusade (uk) (1989).dsk" size="292096" crc="16c81077" sha1="a586a9adc266aae41a3678c1793894d997c3ac2d"/>
@@ -44534,10 +44538,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones And The Temple Of Doom (UK) (1987) [Original].zip... --> <!-- CPC Power -->
-	<software name="indianaj05" cloneof="indianaj" supported="no">
+	<software name="indytemp" supported="yes">
 		<description>Indiana Jones and the Temple of Doom (UK) [Original]</description>
 		<year>1987</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana jones and the temple of doom (uk) (1987) [original].dsk" size="194816" crc="28bc4e43" sha1="f47e3060b9d62de442218db5a7e7cd59de500f63"/>
@@ -44546,10 +44550,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones And The Temple Of Doom (UK) (1987).zip... --> <!-- CPC Power -->
-	<software name="indianaj06" cloneof="indianaj" supported="no">
+	<software name="indytemp01" cloneof="indytemp" supported="yes">
 		<description>Indiana Jones and the Temple of Doom (UK)</description>
 		<year>1987</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="204544">
 				<rom name="indiana jones and the temple of doom (uk) (1987).dsk" size="204544" crc="4c1cbcc7" sha1="3b7aa379806e4f7a1e77a29fdc53c19ccadca866"/>
@@ -70245,23 +70249,11 @@ stick to CPC-Power disks, when available)
 		</part>
 	</software>
 
-	<!-- Identifying Secret Agent - Sly Spy (UK) (1990).zip... --> <!-- CPC Power -->
-	<software name="secretag" supported="no">
-		<description>Secret Agent - Sly Spy (UK)</description>
-		<year>1990</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
-			<dataarea name="flop" size="194816">
-				<rom name="secret agent - sly spy (uk) (1990).dsk" size="194816" crc="3ec4f163" sha1="a41969d5bd1f8b19938a831376d9948bf5504fe9"/>
-			</dataarea>
-		</part>
-	</software>
-
 	<!-- Identifying Secret Agent - Sly Spy (UK) (2 faces) (1990) (Spain retail version) [Original].zip... --> <!-- CPC Power -->
-	<software name="secretag01" cloneof="secretag" supported="no">
+	<software name="slyspy" supported="yes">
 		<description>Secret Agent - Sly Spy (UK) (2 faces) (Spain retail version) [Original]</description>
 		<year>1990</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>Erbe</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="secret agent - sly spy (uk) (face a) (1990) (spain retail version) [original].dsk" size="194816" crc="ad8ad3cd" sha1="de09630051d2dea575b2febc17be785f45a6faeb"/>
@@ -70275,10 +70267,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Secret Agent - Sly Spy (UK) (2 faces) (1990) (UK retail version) [Original] (Weak Sectors).zip... --> <!-- CPC Power -->
-	<software name="secretag02" cloneof="secretag" supported="no">
+	<!-- does not load - Incorrect layout on track 1 head 0, expected_size=105000, current_size=134400 -->
+	<software name="slyspy01" cloneof="slyspy" supported="no">
 		<description>Secret Agent - Sly Spy (UK) (2 faces) (UK retail version) [Original] (Weak Sectors)</description>
 		<year>1990</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>Ocean Software</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="72837">
 				<rom name="secret agent - sly spy (uk) (face a) (1990) (uk retail version) [original] (weak sectors).dsk" size="72837" crc="006979b0" sha1="c366fea55b22398fa76314c9e54b9ff4b1a344f6"/>
@@ -70287,6 +70280,18 @@ stick to CPC-Power disks, when available)
 		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="200755">
 				<rom name="secret agent - sly spy (uk) (face b) (1990) (uk retail version) [original] (weak sectors).dsk" size="200755" crc="a26f639a" sha1="9fff6bfe1ce8cd0247529b65993d0408faa02999"/>
+			</dataarea>
+		</part>
+	</software>
+
+	<!-- Identifying Secret Agent - Sly Spy (UK) (1990).zip... --> <!-- CPC Power -->
+	<software name="slyspy07" cloneof="slyspy" supported="yes">
+		<description>Secret Agent - Sly Spy (UK)</description>
+		<year>1990</year>
+		<publisher>&lt;unknown&gt;</publisher>
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="secret agent - sly spy (uk) (1990).dsk" size="194816" crc="3ec4f163" sha1="a41969d5bd1f8b19938a831376d9948bf5504fe9"/>
 			</dataarea>
 		</part>
 	</software>
@@ -83899,6 +83904,7 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunderbirds (UK) (1988).zip... --> <!-- CPC Power -->
+	<!-- double-sided disk image, not supported -->
 	<software name="thunderb" supported="no">
 		<description>Thunderbirds (UK)</description>
 		<year>1988</year>
@@ -83911,7 +83917,7 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunderbirds (UK) (2 faces) (1988) (CPM) [Original].zip... --> <!-- CPC Power -->
-	<software name="thunderb01" cloneof="thunderb" supported="no">
+	<software name="thunderb01" cloneof="thunderb" supported="yes">
 		<description>Thunderbirds (UK) (2 faces) (CPM) [Original]</description>
 		<year>1988</year>
 		<publisher>&lt;unknown&gt;</publisher>
@@ -106724,7 +106730,7 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Temple of Doom (E).dsk... --> <!-- CPC Base -->
-	<software name="indianaj08" cloneof="indianaj" supported="no">
+	<software name="indytemp02" cloneof="indytemp" supported="yes">
 		<description>Indiana Jones and the Temple of Doom (Euro)</description>
 		<year>19??</year>
 		<publisher>&lt;unknown&gt;</publisher>
@@ -110198,9 +110204,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunder Blade (E).dsk... --> <!-- CPC Base -->
-	<software name="thunderb02" cloneof="thunderb" supported="no">
+	<!-- runs, but with graphical issues -->
+	<software name="thndrbld" supported="no">
 		<description>Thunder Blade (Euro)</description>
-		<year>19??</year>
+		<year>1988</year>
 		<publisher>&lt;unknown&gt;</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="219648">
@@ -110210,23 +110217,16 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunderbirds (E) - Disk 1A.dsk... --> <!-- CPC Base -->
-	<software name="thunderb03" cloneof="thunderb" supported="no">
-		<description>Thunderbirds (Euro) - Disk 1A</description>
-		<year>19??</year>
+	<software name="thunderb02" cloneof="thunderb" supported="yes">
+		<description>Thunderbirds (Euro)</description>
+		<year>1989</year>
 		<publisher>&lt;unknown&gt;</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="176099">
 				<rom name="thunderbirds (e) - disk 1a.dsk" size="176099" crc="aa05e457" sha1="81d093354050984ce46b2a6c379541fc87d8d5bf"/>
 			</dataarea>
 		</part>
-	</software>
-
-	<!-- Identifying Thunderbirds (E) - Disk 1B.dsk... --> <!-- CPC Base -->
-	<software name="thunderb04" cloneof="thunderb" supported="no">
-		<description>Thunderbirds (Euro) - Disk 1B</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
+		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="175075">
 				<rom name="thunderbirds (e) - disk 1b.dsk" size="175075" crc="fbebccf7" sha1="d6d401880a3b95f9236626219b83e95257a10a98"/>
 			</dataarea>
@@ -126413,23 +126413,16 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Fate of Atlantis (1993)(US Gold)(Disk 1 of 2)[cr XOR][t XOR].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="indianaj09" cloneof="indianaj" supported="no">
-		<description>Indiana Jones and the Fate of Atlantis (US Gold)(Disk 1 of 2)[cr XOR][t XOR]</description>
+	<software name="indyfate02" cloneof="indyfate" supported="yes">
+		<description>Indiana Jones and the Fate of Atlantis (US Gold)[cr XOR][t XOR]</description>
 		<year>1993</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana jones and the fate of atlantis (1993)(us gold)(disk 1 of 2)[cr xor][t xor].dsk" size="194816" crc="e7716f6d" sha1="7d3707d554f11a32da26f71113f101e6e6bf4f6a"/>
 			</dataarea>
 		</part>
-	</software>
-
-	<!-- Identifying Indiana Jones and the Fate of Atlantis (1993)(US Gold)(Disk 2 of 2)[cr XOR][t XOR].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="indianaj0a" cloneof="indianaj" supported="no">
-		<description>Indiana Jones and the Fate of Atlantis (US Gold)(Disk 2 of 2)[cr XOR][t XOR]</description>
-		<year>1993</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
+		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana jones and the fate of atlantis (1993)(us gold)(disk 2 of 2)[cr xor][t xor].dsk" size="194816" crc="2b76e8e5" sha1="6ee33e5a9b907fc21e0719804113a88e043c1040"/>
 			</dataarea>
@@ -126437,23 +126430,16 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Last Crusade (1989)(US Gold)(Disk 1 of 2)[cr CACH][t CACH].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="indianaj0b" cloneof="indianaj" supported="no">
-		<description>Indiana Jones and the Last Crusade (US Gold)(Disk 1 of 2)[cr CACH][t CACH]</description>
+	<software name="indycrus03" cloneof="indycrus" supported="yes">
+		<description>Indiana Jones and the Last Crusade (US Gold)[cr CACH][t CACH]</description>
 		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="199680">
 				<rom name="indiana jones and the last crusade (1989)(us gold)(disk 1 of 2)[cr cach][t cach].dsk" size="199680" crc="02e4fae3" sha1="d5ef210567a1d41972dff720c4a571f89a25d3c8"/>
 			</dataarea>
 		</part>
-	</software>
-
-	<!-- Identifying Indiana Jones and the Last Crusade (1989)(US Gold)(Disk 2 of 2)[cr CACH][t CACH].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="indianaj0c" cloneof="indianaj" supported="no">
-		<description>Indiana Jones and the Last Crusade (US Gold)(Disk 2 of 2)[cr CACH][t CACH]</description>
-		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
+		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="199680">
 				<rom name="indiana jones and the last crusade (1989)(us gold)(disk 2 of 2)[cr cach][t cach].dsk" size="199680" crc="c058d106" sha1="9b9931b49d931f508ea7418d88db7ec72e9ec6ce"/>
 			</dataarea>
@@ -126461,10 +126447,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Last Crusade (1989)(US Gold).dsk... --> <!-- Mostly GoodCPC -->
-	<software name="indianaj0d" cloneof="indianaj" supported="no">
+	<software name="indycrus04" cloneof="indycrus" supported="yes">
 		<description>Indiana Jones and the Last Crusade (US Gold)</description>
 		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="214016">
 				<rom name="indiana jones and the last crusade (1989)(us gold).dsk" size="214016" crc="14f2907b" sha1="515032c83b3bfba76b6e3ee4efa6d85298a87214"/>
@@ -126473,10 +126459,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Last Crusade (1989)(US Gold)[cr XOR][t +2 XOR].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="indianaj0e" cloneof="indianaj" supported="no">
+	<software name="indycrus05" cloneof="indycrus" supported="yes">
 		<description>Indiana Jones and the Last Crusade (US Gold)[cr XOR][t +2 XOR]</description>
 		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana jones and the last crusade (1989)(us gold)[cr xor][t +2 xor].dsk" size="194816" crc="dbc9a699" sha1="d73f87ed952e38bc387886226a5d320aa8da53a0"/>
@@ -126485,10 +126471,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Temple of Doom (1985)(US Gold)[a].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="indianaj0f" cloneof="indianaj" supported="no">
+	<!-- image has 45 tracks, doesn't load -->
+	<software name="indytemp03" cloneof="indytemp" supported="no">
 		<description>Indiana Jones and the Temple of Doom (US Gold)[a]</description>
 		<year>1985</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana jones and the temple of doom (1985)(us gold)[a].dsk" size="194816" crc="983d68b7" sha1="975db62e8f57babfdff65edfd4b9405ddde01b59"/>
@@ -126497,10 +126484,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Temple of Doom (1985)(US Gold)[cr NPS][t NPS].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="indianaj10" cloneof="indianaj" supported="no">
+	<!-- minor graphical issues in cracktro, game is playable, but it restarts after the first minecraft stage -->
+	<software name="indytemp04" cloneof="indytemp" supported="no">
 		<description>Indiana Jones and the Temple of Doom (US Gold)[cr NPS][t NPS]</description>
 		<year>1985</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana jones and the temple of doom (1985)(us gold)[cr nps][t nps].dsk" size="194816" crc="0404ef4d" sha1="b1b34d3b06fc9f727470ce6b548dd2c4879d2e40"/>
@@ -144896,8 +144884,9 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Sly Spy - Secret Agent (1990)(Ocean Software)(Disk 1 of 2).dsk... --> <!-- Mostly GoodCPC -->
-	<software name="slyspyse" supported="no">
-		<description>Sly Spy - Secret Agent (Ocean Software)(Disk 1 of 2)</description>
+	<!-- No music on title screen -->
+	<software name="slyspy02" cloneof="slyspy" supported="yes">
+		<description>Sly Spy - Secret Agent (Ocean Software)</description>
 		<year>1990</year>
 		<publisher>&lt;unknown&gt;</publisher>
 		<part name="flop1" interface="floppy_3">
@@ -144905,14 +144894,7 @@ stick to CPC-Power disks, when available)
 				<rom name="sly spy - secret agent (1990)(ocean software)(disk 1 of 2).dsk" size="194816" crc="829c3108" sha1="a3b223d26fa98d1e16f92737621b2b6b63d3c5bc"/>
 			</dataarea>
 		</part>
-	</software>
-
-	<!-- Identifying Sly Spy - Secret Agent (1990)(Ocean Software)(Disk 2 of 2).dsk... --> <!-- Mostly GoodCPC -->
-	<software name="slyspyse01" cloneof="slyspyse" supported="no">
-		<description>Sly Spy - Secret Agent (Ocean Software)(Disk 2 of 2)</description>
-		<year>1990</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
+		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="sly spy - secret agent (1990)(ocean software)(disk 2 of 2).dsk" size="194816" crc="bd06d9d5" sha1="317257889f1fcb4e7f99287ad3241f8641b10d2f"/>
 			</dataarea>
@@ -144920,7 +144902,8 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Sly Spy - Secret Agent (1990)(Ocean Software)[cr XOR][t +2 XOR].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="slyspyse02" cloneof="slyspyse" supported="no">
+	<!-- Some cutscenes have glitched graphics (normal for this hack?) -->
+	<software name="slyspy03" cloneof="slyspy" supported="yes">
 		<description>Sly Spy - Secret Agent (Ocean Software)[cr XOR][t +2 XOR]</description>
 		<year>1990</year>
 		<publisher>&lt;unknown&gt;</publisher>
@@ -150632,10 +150615,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunder Blade (1988)(US Gold).dsk... --> <!-- Mostly GoodCPC -->
-	<software name="thunderb05" cloneof="thunderb" supported="no">
+	<!-- graphical issues -->
+	<software name="thndrbld01" cloneof="thndrbld" supported="no">
 		<description>Thunder Blade (US Gold)</description>
 		<year>1988</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="219648">
 				<rom name="thunder blade (1988)(us gold).dsk" size="219648" crc="a1787b04" sha1="4c4f2c4928da0cfd03684147e0b40045966bc89a"/>
@@ -150644,10 +150628,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunder Blade (1988)(US Gold)[a].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="thunderb06" cloneof="thunderb" supported="no">
+	<!-- disk image has 45 tracks, doesn't load -->
+	<software name="thndrbld02" cloneof="thndrbld" supported="no">
 		<description>Thunder Blade (US Gold)[a]</description>
 		<year>1988</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="219648">
 				<rom name="thunder blade (1988)(us gold)[a].dsk" size="219648" crc="8883f148" sha1="5a94a3d886ac6c382f90129cb0310888d60ce94f"/>
@@ -150656,10 +150641,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunder Blade (1988)(US Gold)[cr Mc Spe][t Mc Spe].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="thunderb07" cloneof="thunderb" supported="no">
+	<!-- graphical issues -->
+	<software name="thndrbld03" cloneof="thndrbld" supported="no">
 		<description>Thunder Blade (US Gold)[cr Mc Spe][t Mc Spe]</description>
 		<year>1988</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="thunder blade (1988)(us gold)[cr mc spe][t mc spe].dsk" size="194816" crc="4a57197f" sha1="3a49b94d42050a5f92214da6ae47e8cbe13900ed"/>
@@ -150668,10 +150654,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunder Blade (1988)(US Gold)[cr Mc Spe][t Mc Spe][a].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="thunderb08" cloneof="thunderb" supported="no">
+	<software name="thndrbld04" cloneof="thndrbld" supported="no">
 		<description>Thunder Blade (US Gold)[cr Mc Spe][t Mc Spe][a]</description>
 		<year>1988</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="thunder blade (1988)(us gold)[cr mc spe][t mc spe][a].dsk" size="194816" crc="a293c9eb" sha1="52b4c0f0f1e9abe3d6874fef5f7c32203b422ccc"/>
@@ -150680,10 +150666,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunder Burner (1991)(Loriciels)[cr XOR][t XOR].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="thunderb09" cloneof="thunderb" supported="no">
+	<software name="thndrbrn" supported="yes">
 		<description>Thunder Burner (Loriciels)[cr XOR][t XOR]</description>
 		<year>1991</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>Loriciel</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="thunder burner (1991)(loriciels)[cr xor][t xor].dsk" size="194816" crc="111f3e7b" sha1="3159d601ada9fff08bebac347043c424584427d2"/>
@@ -150692,10 +150678,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunder Burner (1991)(Loriciels)[cr XOR][t XOR][a].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="thunderb0a" cloneof="thunderb" supported="no">
+	<software name="thndrbrn01" cloneof="thndrbrn" supported="yes">
 		<description>Thunder Burner (Loriciels)[cr XOR][t XOR][a]</description>
 		<year>1991</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>Loriciel</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="thunder burner (1991)(loriciels)[cr xor][t xor][a].dsk" size="194816" crc="fda28291" sha1="f0339413a96b35eb82ae70e4f0594f1d938a5139"/>
@@ -150740,23 +150726,16 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunderbirds (1989)(Grandslam Entertainments)(Disk 1 of 2)[cr Jupiter].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="thunderb05a" cloneof="thunderb" supported="no">
-		<description>Thunderbirds (Grandslam Entertainments)(Disk 1 of 2)[cr Jupiter]</description>
+	<software name="thunderb03" cloneof="thunderb" supported="yes">
+		<description>Thunderbirds (Grandslam Entertainments)[cr Jupiter]</description>
 		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>Grandslam Entertainments</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="thunderbirds (1989)(grandslam entertainments)(disk 1 of 2)[cr jupiter].dsk" size="194816" crc="effc186c" sha1="de5d26d64ff580ae105e54cf02c56a3218251db9"/>
 			</dataarea>
 		</part>
-	</software>
-
-	<!-- Identifying Thunderbirds (1989)(Grandslam Entertainments)(Disk 2 of 2)[cr Jupiter].dsk... --> <!-- Mostly GoodCPC -->
-	<software name="thunderb06a" cloneof="thunderb" supported="no">
-		<description>Thunderbirds (Grandslam Entertainments)(Disk 2 of 2)[cr Jupiter]</description>
-		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
+		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="thunderbirds (1989)(grandslam entertainments)(disk 2 of 2)[cr jupiter].dsk" size="194816" crc="a12a6470" sha1="fe4d0ba162d5162288efa88985481204de8d9590"/>
 			</dataarea>
@@ -168649,46 +168628,48 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Fate of Atlantis (UK) (1991) (Disk 1 of 2) [a1].dsk... --> <!-- GoodCPC -->
-	<software name="indianaj11" cloneof="indianaj" supported="no">
-		<description>Indiana Jones and the Fate of Atlantis (UK) (Disk 1 of 2) [a1]</description>
+	<!-- contains various games -->
+	<software name="indyfate03" cloneof="indyfate" supported="yes">
+		<description>Indiana Jones and the Fate of Atlantis (UK) [a1]</description>
 		<year>1991</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="204544">
 				<rom name="indiana jones and the fate of atlantis (uk) (1991) (disk 1 of 2) [a1] (goodcpc).dsk" size="204544" crc="9d15bd23" sha1="8bb49822d6dcd0502345a303be999cc1ebd74669"/>
 			</dataarea>
 		</part>
-	</software>
-
-	<!-- Identifying Indiana Jones and the Fate of Atlantis (UK) (1991) (Disk 1 of 2).dsk... --> <!-- GoodCPC -->
-	<software name="indianaj12" cloneof="indianaj" supported="no">
-		<description>Indiana Jones and the Fate of Atlantis (UK) (Disk 1 of 2)</description>
-		<year>1991</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
-			<dataarea name="flop" size="194816">
-				<rom name="indiana jones and the fate of atlantis (uk) (1991) (disk 1 of 2) (goodcpc).dsk" size="194816" crc="8249e4e5" sha1="1562251fb1780e1b6a0d700224569af4929fa9bd"/>
-			</dataarea>
-		</part>
-	</software>
-
-	<!-- Identifying Indiana Jones and the Fate of Atlantis (UK) (1991) (Disk 2 of 2) [a1].dsk... --> <!-- GoodCPC -->
-	<software name="indianaj13" cloneof="indianaj" supported="no">
-		<description>Indiana Jones and the Fate of Atlantis (UK) (Disk 2 of 2) [a1]</description>
-		<year>1991</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
+		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="204544">
 				<rom name="indiana jones and the fate of atlantis (uk) (1991) (disk 2 of 2) [a1] (goodcpc).dsk" size="204544" crc="33c4c67e" sha1="d9f3eabd2722e7e20a3b79a6a5e1fd55f25dd4f1"/>
 			</dataarea>
 		</part>
 	</software>
 
-	<!-- Identifying Indiana Jones and the Fate of Atlantis (UK) (1991) (Disk 2 of 2) [t2].dsk... --> <!-- GoodCPC -->
-	<software name="indianaj14" cloneof="indianaj" supported="no">
-		<description>Indiana Jones and the Fate of Atlantis (UK) (Disk 2 of 2) [t2]</description>
+	<!-- Identifying Indiana Jones and the Fate of Atlantis (UK) (1991) (Disk 1 of 2).dsk... --> <!-- GoodCPC -->
+	<software name="indyfate04" cloneof="indyfate" supported="yes">
+		<description>Indiana Jones and the Fate of Atlantis (UK)</description>
 		<year>1991</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
+		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="indiana jones and the fate of atlantis (uk) (1991) (disk 1 of 2) (goodcpc).dsk" size="194816" crc="8249e4e5" sha1="1562251fb1780e1b6a0d700224569af4929fa9bd"/>
+			</dataarea>
+		</part>
+		<part name="flop2" interface="floppy_3">
+			<dataarea name="flop" size="194816">
+				<rom name="indiana jones and the fate of atlantis (uk) (1991) (disk 2 of 2) (goodcpc).dsk" size="194816" crc="c98e0c74" sha1="aa29259373c7db3866e224773d4ff5808be5e033"/>
+			</dataarea>
+		</part>
+	</software>
+
+
+
+	<!-- Identifying Indiana Jones and the Fate of Atlantis (UK) (1991) (Disk 2 of 2).dsk... --> <!-- GoodCPC -->
+	<!-- stray image -->
+	<software name="indyfate05" cloneof="indyfate" supported="no">
+		<description>Indiana Jones and the Fate of Atlantis (UK) [t2] (Disk 2)</description>
+		<year>1991</year>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="292096">
 				<rom name="indiana jones and the fate of atlantis (uk) (1991) (disk 2 of 2) [t2] (goodcpc).dsk" size="292096" crc="0fcdecdc" sha1="25aa2998f0f7f29746828d0278fef8820f32891a"/>
@@ -168696,23 +168677,12 @@ stick to CPC-Power disks, when available)
 		</part>
 	</software>
 
-	<!-- Identifying Indiana Jones and the Fate of Atlantis (UK) (1991) (Disk 2 of 2).dsk... --> <!-- GoodCPC -->
-	<software name="indianaj15" cloneof="indianaj" supported="no">
-		<description>Indiana Jones and the Fate of Atlantis (UK) (Disk 2 of 2)</description>
-		<year>1991</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
-			<dataarea name="flop" size="194816">
-				<rom name="indiana jones and the fate of atlantis (uk) (1991) (disk 2 of 2) (goodcpc).dsk" size="194816" crc="c98e0c74" sha1="aa29259373c7db3866e224773d4ff5808be5e033"/>
-			</dataarea>
-		</part>
-	</software>
-
 	<!-- Identifying Indiana Jones and the Last Crusade (UK) (1989) (Disk 1 of 2) [t1].dsk... --> <!-- GoodCPC -->
-	<software name="indianaj16" cloneof="indianaj" supported="no">
+	<!-- image has 60 tracks, doesn't load, double sided? -->
+	<software name="indycrus06" cloneof="indycrus" supported="no">
 		<description>Indiana Jones and the Last Crusade (UK) (Disk 1 of 2) [t1]</description>
 		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="292096">
 				<rom name="indiana jones and the last crusade (uk) (1989) (disk 1 of 2) [t1] (goodcpc).dsk" size="292096" crc="6fe470ad" sha1="b33153f592a4395775c3e0f2baf94c164a668598"/>
@@ -168721,10 +168691,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Last Crusade (UK) (1989) [a1].dsk... --> <!-- GoodCPC -->
-	<software name="indianaj17" cloneof="indianaj" supported="no">
+	<!-- missing a disk image? -->
+	<software name="indycrus07" cloneof="indycrus" supported="yes">
 		<description>Indiana Jones and the Last Crusade (UK) [a1]</description>
 		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="215296">
 				<rom name="indiana jones and the last crusade (uk) (1989) [a1] (goodcpc).dsk" size="215296" crc="28680f2c" sha1="b8cb0990411b9a28930362149195002f9a9cae1b"/>
@@ -168733,10 +168704,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Last Crusade (UK) (1989) [a2].dsk... --> <!-- GoodCPC -->
-	<software name="indianaj18" cloneof="indianaj" supported="no">
+	<!-- Image has 80 tracks, doesn't load, probably double-sided -->
+	<software name="indycrus08" cloneof="indycrus" supported="no">
 		<description>Indiana Jones and the Last Crusade (UK) [a2]</description>
 		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="248832">
 				<rom name="indiana jones and the last crusade (uk) (1989) [a2] (goodcpc).dsk" size="248832" crc="0e2a4b9c" sha1="d81480c5a244142b6111fd4abadb8b947792cb67"/>
@@ -168745,10 +168717,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Last Crusade (UK) (1989) [t2].dsk... --> <!-- GoodCPC -->
-	<software name="indianaj19" cloneof="indianaj" supported="no">
+	<!-- Indy keeps dying immediately -->
+	<software name="indycrus09" cloneof="indycrus" supported="no">
 		<description>Indiana Jones and the Last Crusade (UK) [t2]</description>
 		<year>1989</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana jones and the last crusade (uk) (1989) [t2] (goodcpc).dsk" size="194816" crc="dfc1e768" sha1="834639cdf7939525b77d435f974c3f6a87784625"/>
@@ -168757,10 +168730,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Temple of Doom (UK) (1987) [a1].dsk... --> <!-- GoodCPC -->
-	<software name="indianaj1a" cloneof="indianaj" supported="no">
+	<!-- Segfault on load -->
+	<software name="indytemp05" cloneof="indytemp" supported="no">
 		<description>Indiana Jones and the Temple of Doom (UK) [a1]</description>
 		<year>1987</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana jones and the temple of doom (uk) (1987) [a1] (goodcpc).dsk" size="194816" crc="9cd656d7" sha1="3e74100977021c3da0792a759a6f35598fd0c552"/>
@@ -168769,10 +168743,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Temple of Doom (UK) (1987) [h1].dsk... --> <!-- GoodCPC -->
-	<software name="indianaj11a" cloneof="indianaj" supported="no">
+	<software name="indytemp06" cloneof="indytemp" supported="yes">
 		<description>Indiana Jones and the Temple of Doom (UK) [h1]</description>
 		<year>1987</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana jones and the temple of doom (uk) (1987) [h1] (goodcpc).dsk" size="194816" crc="6700a95b" sha1="4a7b693eeb8c8e79b7798528c3a253da92c3983b"/>
@@ -183025,9 +182999,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Secret Agent (UK) (19xx) [t1].dsk... --> <!-- GoodCPC -->
-	<software name="secretag03" cloneof="secretag" supported="no">
+	<!-- does not load - too many tracks (double-sided floppy image? -->
+	<software name="slyspy04" cloneof="slyspy" supported="no">
 		<description>Secret Agent (UK) [t1]</description>
-		<year>19??</year>
+		<year>1990</year>
 		<publisher>&lt;unknown&gt;</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="296960">
@@ -184128,9 +184103,9 @@ stick to CPC-Power disks, when available)
 		</part>
 	</software>
 
-	<!-- Identifying Sly Spy - Secret Agent (UK) (1990) (Disk 1 of 2) [a1].dsk... --> <!-- GoodCPC -->
-	<software name="slyspyse03" cloneof="slyspyse" supported="no">
-		<description>Sly Spy - Secret Agent (UK) (Disk 1 of 2) [a1]</description>
+	<!-- Identifying Sly Spy - Secret Agent (UK) (1990) [a1].dsk... --> <!-- GoodCPC -->
+	<software name="slyspy05" cloneof="slyspy" supported="yes">
+		<description>Sly Spy - Secret Agent (UK) [a1]</description>
 		<year>1990</year>
 		<publisher>&lt;unknown&gt;</publisher>
 		<part name="flop1" interface="floppy_3">
@@ -184138,14 +184113,7 @@ stick to CPC-Power disks, when available)
 				<rom name="sly spy - secret agent (uk) (1990) (disk 1 of 2) [a1] (goodcpc).dsk" size="204544" crc="c123f14d" sha1="9ea706a4ab10011d0ee4d1347b7bde54aa4c5e32"/>
 			</dataarea>
 		</part>
-	</software>
-
-	<!-- Identifying Sly Spy - Secret Agent (UK) (1990) (Disk 2 of 2) [a1].dsk... --> <!-- GoodCPC -->
-	<software name="slyspyse04" cloneof="slyspyse" supported="no">
-		<description>Sly Spy - Secret Agent (UK) (Disk 2 of 2) [a1]</description>
-		<year>1990</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
+		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="sly spy - secret agent (uk) (1990) (disk 2 of 2) [a1] (goodcpc).dsk" size="194816" crc="1179ce0b" sha1="899ec70ae49f0dd1aa1731142c9691a2a66941f9"/>
 			</dataarea>
@@ -187801,10 +187769,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunder Blade (UK) (1988) [a1].dsk... --> <!-- GoodCPC -->
-	<software name="thunderb0ba" cloneof="thunderb" supported="no">
+	<!-- graphical issues -->
+	<software name="thndrbld05" cloneof="thndrbld" supported="no">
 		<description>Thunder Blade (UK) [a1]</description>
 		<year>1988</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="thunder blade (uk) (1988) [a1] (goodcpc).dsk" size="194816" crc="b668cf4e" sha1="68bcca7acfb8632b4bb5b615667af09d84dee7e8"/>
@@ -187813,10 +187782,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunder Burner (UK) (1991) [t1].dsk... --> <!-- GoodCPC -->
-	<software name="thunderb0ca" cloneof="thunderb" supported="no">
+	<software name="thndrbrn02" cloneof="thndrbrn" supported="yes">
 		<description>Thunder Burner (UK) [t1]</description>
 		<year>1991</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>Loriciel</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="thunder burner (uk) (1991) [t1] (goodcpc).dsk" size="194816" crc="5032c57a" sha1="f3184bed410875d5fe3ebd471bc77c8ef84a59bd"/>
@@ -187837,47 +187806,34 @@ stick to CPC-Power disks, when available)
 	</software>-->
 
 	<!-- Identifying Thunderbirds (UK) (1988) (Disk 1 of 2) [a1].dsk... --> <!-- GoodCPC -->
-	<software name="thunderb0b" cloneof="thunderb" supported="no">
-		<description>Thunderbirds (UK) (Disk 1 of 2) [a1]</description>
+	<!-- both disk images have 61 tracks (double sided images?), doesn't load -->
+	<software name="thunderb04" cloneof="thunderb" supported="no">
+		<description>Thunderbirds (UK) [a1]</description>
 		<year>1988</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>Grandslam Entertainments</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="292096">
 				<rom name="thunderbirds (uk) (1988) (disk 1 of 2) [a1] (goodcpc).dsk" size="292096" crc="d9593e6a" sha1="45fe3dd30405f03ac46d5b5c274083d3da47feaf"/>
 			</dataarea>
 		</part>
-	</software>
-
-	<!-- Identifying Thunderbirds (UK) (1988) (Disk 1 of 2) [a2].dsk... --> <!-- GoodCPC -->
-	<software name="thunderb0c" cloneof="thunderb" supported="no">
-		<description>Thunderbirds (UK) (Disk 1 of 2) [a2]</description>
-		<year>1988</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
-			<dataarea name="flop" size="174336">
-				<rom name="thunderbirds (uk) (1988) (disk 1 of 2) [a2] (goodcpc).dsk" size="174336" crc="aab281db" sha1="9e00e179b72fd58131c178d72734edca8d39eb93"/>
-			</dataarea>
-		</part>
-	</software>
-
-	<!-- Identifying Thunderbirds (UK) (1988) (Disk 2 of 2) [a1].dsk... --> <!-- GoodCPC -->
-	<software name="thunderb0d" cloneof="thunderb" supported="no">
-		<description>Thunderbirds (UK) (Disk 2 of 2) [a1]</description>
-		<year>1988</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
+		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="292096">
 				<rom name="thunderbirds (uk) (1988) (disk 2 of 2) [a1] (goodcpc).dsk" size="292096" crc="ffd46ff7" sha1="3aa72635b6a71c200f2572f80311de3d7fdaeab1"/>
 			</dataarea>
 		</part>
 	</software>
 
-	<!-- Identifying Thunderbirds (UK) (1988) (Disk 2 of 2) [a2].dsk... --> <!-- GoodCPC -->
-	<software name="thunderb0e" cloneof="thunderb" supported="no">
-		<description>Thunderbirds (UK) (Disk 2 of 2) [a2]</description>
+	<!-- Identifying Thunderbirds (UK) (1988) (Disk 1 of 2) [a2].dsk... --> <!-- GoodCPC -->
+	<software name="thunderb05" cloneof="thunderb" supported="yes">
+		<description>Thunderbirds (UK) [a2]</description>
 		<year>1988</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>Grandslam Entertainments</publisher>
 		<part name="flop1" interface="floppy_3">
+			<dataarea name="flop" size="174336">
+				<rom name="thunderbirds (uk) (1988) (disk 1 of 2) [a2] (goodcpc).dsk" size="174336" crc="aab281db" sha1="9e00e179b72fd58131c178d72734edca8d39eb93"/>
+			</dataarea>
+		</part>
+		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="174336">
 				<rom name="thunderbirds (uk) (1988) (disk 2 of 2) [a2] (goodcpc).dsk" size="174336" crc="713270b6" sha1="bab9f1b9c4adeb8396f568b8763b24c009f00326"/>
 			</dataarea>
@@ -187885,10 +187841,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunderbirds (UK) (1988) [t1].dsk... --> <!-- GoodCPC -->
-	<software name="thunderb0f" cloneof="thunderb" supported="no">
+	<!-- double sided disk image, doesn't load -->
+	<software name="thunderb06" cloneof="thunderb" supported="no">
 		<description>Thunderbirds (UK) [t1]</description>
 		<year>1988</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<publisher>Grandslam Entertainments</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="292096">
 				<rom name="thunderbirds (uk) (1988) [t1] (goodcpc).dsk" size="292096" crc="e387c225" sha1="f50cbb80d84492dbeccc1795503796c346cef2e2"/>
@@ -202206,10 +202163,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Last Crusade #1 (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="indianaj1b" cloneof="indianaj" supported="no">
+	<software name="indycrus10" cloneof="indycrus" supported="yes">
 		<description>Indiana Jones and the Last Crusade #1</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<year>1989</year>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="208640">
 				<rom name="indiana jones and the last crusade #1 (nongoodcpc).dsk" size="208640" crc="784c50f2" sha1="0b3c6c414f36c6530babe88d2f9e9cbf79730d51"/>
@@ -202218,10 +202175,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Last Crusade #2 (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="indianaj1c" cloneof="indianaj" supported="no">
+	<software name="indycrus11" cloneof="indycrus" supported="yes">
 		<description>Indiana Jones and the Last Crusade #2</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<year>1989</year>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="214016">
 				<rom name="indiana jones and the last crusade #2 (nongoodcpc).dsk" size="214016" crc="eee69238" sha1="e54a2d712b3f84da92db0756c2c5a8d053008c07"/>
@@ -202230,10 +202187,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Last Crusade #3 (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="indianaj1d" cloneof="indianaj" supported="no">
+	<software name="indycrus12" cloneof="indycrus" supported="yes">
 		<description>Indiana Jones and the Last Crusade #3</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<year>1989</year>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="208640">
 				<rom name="indiana jones and the last crusade #3 (nongoodcpc).dsk" size="208640" crc="015550e2" sha1="ebb37e5367fe1ad366b3f7f1bdbaa6785542f419"/>
@@ -202242,10 +202199,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Last Crusade #5 (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="indianaj1e" cloneof="indianaj" supported="no">
+	<software name="indycrus13" cloneof="indycrus" supported="yes">
 		<description>Indiana Jones and the Last Crusade #5</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<year>1989</year>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="214016">
 				<rom name="indiana jones and the last crusade #5 (nongoodcpc).dsk" size="214016" crc="aeb7b6d4" sha1="68aa156562de2f88aa997e3b48994409133883f6"/>
@@ -202254,10 +202211,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Last Crusade (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="indianaj1f" cloneof="indianaj" supported="no">
+	<software name="indycrus14" cloneof="indycrus" supported="yes">
 		<description>Indiana Jones and the Last Crusade</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<year>1989</year>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="248832">
 				<rom name="indiana jones and the last crusade (nongoodcpc).dsk" size="248832" crc="e64164c8" sha1="61d345c3e3cb43acf88d5ee4b0d5d1196d23b521"/>
@@ -202266,7 +202223,8 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Temple of Doom &amp; Dan Dare (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="indianaj20" cloneof="indianaj" supported="no">
+	<!-- run"disk" to run Indy, run"dandare" to run Dan Dare -->
+	<software name="indytempdan" cloneof="indytemp" supported="yes">
 		<description>Indiana Jones and the Temple of Doom &amp; Dan Dare</description>
 		<year>19??</year>
 		<publisher>&lt;unknown&gt;</publisher>
@@ -202278,10 +202236,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones and the Temple of Doom (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="indianaj21" cloneof="indianaj" supported="no">
+	<software name="indytemp07" cloneof="indytemp" supported="yes">
 		<description>Indiana Jones and the Temple of Doom</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<year>1987</year>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana jones and the temple of doom (nongoodcpc).dsk" size="194816" crc="731258d1" sha1="4384510a68da6be62333b62786bef50ccba69e59"/>
@@ -202290,10 +202248,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones y la ultima Cruzada #1 (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="indianaj22" cloneof="indianaj" supported="no">
+	<!-- Image has 45 tracks, doesn't load -->
+	<software name="indycrus15" cloneof="indycrus" supported="no">
 		<description>Indiana Jones y la ultima Cruzada #1</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<year>1989</year>
+		<publisher>Erbe / US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="214016">
 				<rom name="indiana jones y la ultima cruzada #1 (nongoodcpc).dsk" size="214016" crc="681ca92c" sha1="edd27c50061f2adc308b6c1732f87ed303fbf34d"/>
@@ -202302,10 +202261,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones y la ultima Cruzada #2 (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="indianaj23" cloneof="indianaj" supported="no">
+	<!-- Image has 45 tracks, doesn't load -->
+	<software name="indycrus16" cloneof="indycrus" supported="no">
 		<description>Indiana Jones y la ultima Cruzada #2</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<year>1989</year>
+		<publisher>Erbe / US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="214016">
 				<rom name="indiana jones y la ultima cruzada #2 (nongoodcpc).dsk" size="214016" crc="ecbde054" sha1="0f533dd2cdd07a4729fa56c29072edafbd82f580"/>
@@ -202314,10 +202274,10 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="indianaj24" cloneof="indianaj" supported="no">
+	<software name="indytemp08" cloneof="indytemp" supported="yes">
 		<description>Indiana Jones</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<year>1989</year>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana jones (nongoodcpc).dsk" size="194816" crc="8ec73c07" sha1="9ca70480e4e0f1da7ef037819a125bc263e2f30e"/>
@@ -202326,10 +202286,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana_Jones_2-The_Temple_of_Doom__CHANY-NPS (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="indianaj25" cloneof="indianaj" supported="no">
+	<!-- game restarts after first minecart stage -->
+	<software name="indytemp09" cloneof="indytemp" supported="yes">
 		<description>Indiana_Jones_2-The_Temple_of_Doom__CHANY-NPS</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
+		<year>1987</year>
+		<publisher>US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="indiana_jones_2-the_temple_of_doom__chany-nps (nongoodcpc).dsk" size="194816" crc="d90cf653" sha1="ba74d1e5fc53067128580b1ce695dc9b6958a313"/>
@@ -214374,23 +214335,16 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Sly Spy - Secret Agent (1 de 2) (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="slyspyse05" cloneof="slyspyse" supported="no">
-		<description>Sly Spy - Secret Agent (1 de 2)</description>
-		<year>19??</year>
+	<software name="slyspy06" cloneof="slyspy" supported="yes">
+		<description>Sly Spy - Secret Agent (NonGoodCPC)</description>
+		<year>1990</year>
 		<publisher>&lt;unknown&gt;</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="sly spy - secret agent (1 de 2) (nongoodcpc).dsk" size="194816" crc="d78556f8" sha1="b2529c705f0fba2f9155f0a8c8d98fe5bd143600"/>
 			</dataarea>
 		</part>
-	</software>
-
-	<!-- Identifying Sly Spy - Secret Agent (2 de 2) (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="slyspyse06" cloneof="slyspyse" supported="no">
-		<description>Sly Spy - Secret Agent (2 de 2)</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
+		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="194816">
 				<rom name="sly spy - secret agent (2 de 2) (nongoodcpc).dsk" size="194816" crc="65723a81" sha1="1d5b162080cf5ac0e404486a2ae7d185cdb48e7a"/>
 			</dataarea>
@@ -216738,23 +216692,17 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Thunder Burner (Cara A) (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="thunderb10" cloneof="thunderb" supported="no">
-		<description>Thunder Burner (Cara A)</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
+	<!-- game locks up when you collide with terrain, which doesn't seem to happen in other versions of this game.  Protection in track 43, perhaps? -->
+	<software name="thndrbrn03" cloneof="thndrbrn" supported="no">
+		<description>Thunder Burner (Spain)</description>
+		<year>1991</year>
+		<publisher>Proein Softline / Loriciel</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="199680">
 				<rom name="thunder burner (cara a) (nongoodcpc).dsk" size="199680" crc="aa1cdd53" sha1="895ef623b8d5364a83712d53d0fa054437ba928a"/>
 			</dataarea>
 		</part>
-	</software>
-
-	<!-- Identifying Thunder Burner (Cara B) (nongoodcpc).dsk... --> <!-- NonGoodCPC -->
-	<software name="thunderb11" cloneof="thunderb" supported="no">
-		<description>Thunder Burner (Cara B)</description>
-		<year>19??</year>
-		<publisher>&lt;unknown&gt;</publisher>
-		<part name="flop1" interface="floppy_3">
+		<part name="flop2" interface="floppy_3">
 			<dataarea name="flop" size="9984">
 				<rom name="thunder burner (cara b) (nongoodcpc).dsk" size="9984" crc="df053bfb" sha1="e760195a9549de81499420720b64f657ed384db3"/>
 			</dataarea>
@@ -231662,10 +231610,11 @@ stick to CPC-Power disks, when available)
 	</software>
 
 	<!-- Identifying Indiana Jones And The Temple Of Doom + Rygar (UK) (2 faces) (1988) [Original] [COMPILATION].zip... -->
-	<software name="indianaj07" cloneof="indianaj" supported="no">
-		<description>Indiana Jones and the Temple of Doom + Rygar (UK) (2 faces) [Original] [COMPILATION]</description>
-		<year>1988</year>
-		<publisher>&lt;unknown&gt;</publisher>
+	<!-- Side B image has 45 tracks, doesn't load, Side A (indytemp) works perfectly fine -->
+	<software name="indytemp10" cloneof="indytemp" supported="no">
+		<description>2 por 1 - Indiana Jones and the Temple of Doom + Rygar (Spain) (2 faces) [Original] [COMPILATION]</description>
+		<year>19??</year>
+		<publisher>Erbe / US Gold</publisher>
 		<part name="flop1" interface="floppy_3">
 			<dataarea name="flop" size="141312">
 				<rom name="indiana jones and the temple of doom + rygar (uk) (face a) (1988) [original] [compilation].dsk" size="141312" crc="d21536b1" sha1="ab13b5e11827cfe53e4da11608d16d58771edf1b"/>

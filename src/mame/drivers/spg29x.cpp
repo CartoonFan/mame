@@ -245,8 +245,8 @@ uint32_t spg29x_game_state::spg290_screen_update(screen_device &screen, bitmap_r
 		for (int y=0; y <= cliprect.max_y; y++)
 			for (int x=0; x <= cliprect.max_x; x++)
 			{
-				auto pix = rgb_t(bitmap.pix32(y, x));
-				bitmap.pix32(y, x) = rgb_t(pix.r() * fade_offset / 255, pix.g() * fade_offset / 255, pix.b() * fade_offset / 255);
+				rgb_t pix(bitmap.pix(y, x));
+				bitmap.pix(y, x) = rgb_t(pix.r() * fade_offset / 255, pix.g() * fade_offset / 255, pix.b() * fade_offset / 255);
 			}
 	}
 
@@ -537,21 +537,21 @@ ROM_START( zone3d )
 	unk1: 0000000000000007
 	unk2: 00000000000000fa
 	unk3: 01
-	
+
 	The SD card has no label, but there's some printing on the back:
 	MMAGF0380M3085-WY
 	TC00201106 by Taiwan
 
 	--
 	Dumped with hardware write blocker, so this image is correct, and hasn't been corrupted by Windows
-	
+
 	Image contains a FAT filesystem with a number of compressed? programs that presumably get loaded into RAM by
 	the bootloader in the serial flash ROM
 	*/
 
 	DISK_REGION( "cfcard" )
 	DISK_IMAGE( "zone3d", 0, SHA1(77971e2dbfb2ceac12f482d72539c2e042fd9108) )
-	
+
 	ROM_REGION( 0x008000, "spg290", ROMREGION_32BIT | ROMREGION_LE )
 	ROM_LOAD32_DWORD("internal.rom", 0x000000, 0x008000, NO_DUMP)
 ROM_END

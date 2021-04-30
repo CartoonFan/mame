@@ -6,9 +6,8 @@
 #include "cpu/i86/i286.h"
 #include "machine/8042kbdc.h"
 #include "machine/at.h"
-#include "sound/262intf.h"
 #include "sound/dac.h"
-#include "sound/volt_reg.h"
+#include "sound/ymf262.h"
 #include "video/pc_vga.h"
 #include "speaker.h"
 
@@ -141,12 +140,6 @@ void vis_audio_device::device_add_mconfig(machine_config &config)
 	DAC_16BIT_R2R(config, m_rdac, 0);
 	m_ldac->add_route(ALL_OUTPUTS, "lspeaker", 1.0); // sanyo lc7883k
 	m_rdac->add_route(ALL_OUTPUTS, "rspeaker", 1.0); // sanyo lc7883k
-
-	voltage_regulator_device &vreg(VOLTAGE_REGULATOR(config, "vref"));
-	vreg.add_route(0, "ldac", 1.0, DAC_VREF_POS_INPUT);
-	vreg.add_route(0, "rdac", 1.0, DAC_VREF_POS_INPUT);
-	vreg.add_route(0, "ldac", -1.0, DAC_VREF_NEG_INPUT);
-	vreg.add_route(0, "rdac", -1.0, DAC_VREF_NEG_INPUT);
 }
 
 uint8_t vis_audio_device::pcm_r(offs_t offset)
@@ -316,11 +309,11 @@ void vis_vga_device::vga_vh_yuv8(bitmap_rgb32 &bitmap, const rectangle &cliprect
 {
 	const uint32_t IV = 0xff000000;
 	int height = vga.crtc.maximum_scan_line * (vga.crtc.scan_doubling + 1);
-	int pos, line, column, col, addr, curr_addr = 0;
+	int curr_addr = 0;
 	const uint8_t decode_tbl[] = {0, 1, 2, 3, 4, 5, 6, 9, 12, 17, 22, 29, 38, 50, 66, 91, 128, 165, 190,
 		206, 218, 227, 234, 239, 244, 247, 250, 251, 252, 253, 254, 255};
 
-	for (addr = vga.crtc.start_addr, line=0; line<(vga.crtc.vert_disp_end+1); line+=height, addr+=offset(), curr_addr+=offset())
+	for (int addr = vga.crtc.start_addr, line=0; line<(vga.crtc.vert_disp_end+1); line+=height, addr+=offset(), curr_addr+=offset())
 	{
 		for(int yi = 0;yi < height; yi++)
 		{
@@ -329,7 +322,7 @@ void vis_vga_device::vga_vh_yuv8(bitmap_rgb32 &bitmap, const rectangle &cliprect
 				curr_addr = addr;
 			if((line + yi) == (vga.crtc.line_compare & 0x3ff))
 				curr_addr = 0;
-			for (pos=curr_addr, col=0, column=0; column<(vga.crtc.horz_disp_end+1); column++, col+=8, pos+=8)
+			for (int pos=curr_addr, col=0, column=0; column<(vga.crtc.horz_disp_end+1); column++, col+=8, pos+=8)
 			{
 				if(pos + 0x08 > 0x80000)
 					return;
@@ -340,8 +333,7 @@ void vis_vga_device::vga_vh_yuv8(bitmap_rgb32 &bitmap, const rectangle &cliprect
 						continue;
 					uint8_t a = vga.memory[pos + xi], b = vga.memory[pos + xi + 1];
 					uint8_t c = vga.memory[pos + xi + 2], d = vga.memory[pos + xi + 3];
-					uint8_t y[4], ub, vb, trans;
-					uint16_t u, v;
+					uint8_t y[4], ub, vb;
 					if(col || xi)
 					{
 						y[0] = decode_tbl[a & 0x1f] + ydelta;
@@ -357,9 +349,9 @@ void vis_vga_device::vga_vh_yuv8(bitmap_rgb32 &bitmap, const rectangle &cliprect
 					y[1] = decode_tbl[b & 0x1f] + y[0];
 					y[2] = decode_tbl[c & 0x1f] + y[1];
 					y[3] = decode_tbl[d & 0x1f] + y[2];
-					trans = (a >> 7) | ((c >> 6) & 2);
-					u = ua;
-					v = va;
+					uint8_t trans = (a >> 7) | ((c >> 6) & 2);
+					uint16_t u = ua;
+					uint16_t v = va;
 					for(int i = 0; i < 4; i++)
 					{
 						if(i == trans)
@@ -372,7 +364,7 @@ void vis_vga_device::vga_vh_yuv8(bitmap_rgb32 &bitmap, const rectangle &cliprect
 							u = ub;
 							v = vb;
 						}
-						bitmap.pix32(line + yi, col + xi + i) = IV | (uint32_t)yuv_to_rgb(y[i], u, v);
+						bitmap.pix(line + yi, col + xi + i) = IV | (uint32_t)yuv_to_rgb(y[i], u, v);
 					}
 					ua = ub;
 					va = vb;
@@ -546,7 +538,7 @@ void vis_vga_device::vga_w(offs_t offset, uint8_t data)
 			break;
 		case 0x05:
 		case 0x25:
-			assert(vga.crtc.index < ARRAY_LENGTH(m_crtc_regs));
+			assert(vga.crtc.index < std::size(m_crtc_regs));
 			m_crtc_regs[vga.crtc.index] = data;
 			switch(vga.crtc.index)
 			{
@@ -559,7 +551,7 @@ void vis_vga_device::vga_w(offs_t offset, uint8_t data)
 				case 0x01:
 					if(vga.crtc.protect_enable)
 						return;
-					vga.crtc.horz_disp_end = data / (m_interlace && !(vga.sequencer.data[0x25] & 0x20) ? 2 : 1);
+					vga.crtc.horz_disp_end = (data / (m_interlace && !(vga.sequencer.data[0x25] & 0x20) ? 2 : 1)) | 1;
 					recompute_params();
 					return;
 				case 0x02:
@@ -659,7 +651,7 @@ void vis_vga_device::vga_w(offs_t offset, uint8_t data)
 						if(!(vga.sequencer.data[0x25] & 0x20))
 						{
 							vga.crtc.horz_total /= 2;
-							vga.crtc.horz_disp_end /= 2;
+							vga.crtc.horz_disp_end = (vga.crtc.horz_disp_end / 2) | 1;
 							vga.crtc.horz_blank_end /= 2;
 							vga.crtc.horz_retrace_start /= 2;
 							vga.crtc.horz_retrace_end /= 2;
@@ -676,7 +668,7 @@ void vis_vga_device::vga_w(offs_t offset, uint8_t data)
 						if(!(vga.sequencer.data[0x25] & 0x20))
 						{
 							vga.crtc.horz_total *= 2;
-							vga.crtc.horz_disp_end *= 2;
+							vga.crtc.horz_disp_end  = (vga.crtc.horz_disp_end * 2) | 1;
 							vga.crtc.horz_blank_end *= 2;
 							vga.crtc.horz_retrace_start *= 2;
 							vga.crtc.horz_retrace_end *= 2;
@@ -911,10 +903,9 @@ void vis_state::vis(machine_config &config)
 	maincpu.shutdown_callback().set("mb", FUNC(at_mb_device::shutdown));
 	maincpu.set_irq_acknowledge_callback("mb:pic8259_master", FUNC(pic8259_device::inta_cb));
 
-	AT_MB(config, "mb", 0);
+	AT_MB(config, "mb");
 	// the vis doesn't have a real keyboard controller
 	config.device_remove("mb:keybc");
-	config.device_remove("mb:pc_kbdc");
 
 	kbdc8042_device &kbdc(KBDC8042(config, "kbdc"));
 	kbdc.set_keyboard_type(kbdc8042_device::KBDC8042_STANDARD);

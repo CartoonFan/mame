@@ -104,12 +104,13 @@ Stephh's notes (based on the games Z80 code and some tests) :
 #include "machine/nvram.h"
 #include "sound/ay8910.h"
 #include "sound/dac.h"
-#include "sound/volt_reg.h"
 #include "video/mc6845.h"
 #include "emupal.h"
 #include "screen.h"
 #include "speaker.h"
 
+
+namespace {
 
 class royalmah_state : public driver_device
 {
@@ -123,15 +124,18 @@ public:
 		m_audiocpu(*this, "audiocpu"),
 		m_rtc(*this, "rtc"),
 		m_soundlatch(*this, "soundlatch"),
-		m_mainbank(*this, "mainbank")
+		m_mainbank(*this, "mainbank"),
+		m_decrypted_opcodes(*this, "decrypted_opcodes")
 	{ }
 
 	void mjdiplob(machine_config &config);
 	void tahjong(machine_config &config);
 	void tontonb(machine_config &config);
 	void mjderngr(machine_config &config);
+	void mjsenka(machine_config &config);
 	void mjyarou(machine_config &config);
 	void janoh(machine_config &config);
+	void janoha(machine_config &config);
 	void mjtensin(machine_config &config);
 	void mjvegasa(machine_config &config);
 	void jansou(machine_config &config);
@@ -161,6 +165,11 @@ public:
 	void init_mjifb();
 	void init_tontonb();
 	void init_janptr96();
+	void init_mjsenka();
+	void init_mjsiyoub();
+
+protected:
+	virtual void machine_start() override;
 
 private:
 	uint8_t player_1_port_r();
@@ -216,7 +225,6 @@ private:
 	void mjifb_coin_counter_w(uint8_t data);
 	uint8_t mjifb_rom_io_r(offs_t offset);
 	void mjifb_rom_io_w(offs_t offset, uint8_t data);
-	void mjifb_videoram_w(offs_t offset, uint8_t data);
 	uint8_t mjifb_p3_r();
 	uint8_t mjifb_p5_r();
 	uint8_t mjifb_p6_r();
@@ -280,6 +288,8 @@ private:
 	void mjderngr_iomap(address_map &map);
 	void mjdiplob_iomap(address_map &map);
 	void mjifb_map(address_map &map);
+	void mjyarou_map(address_map &map);
+	void mjsenka_opcodes_map(address_map &map);
 	void mjtensin_map(address_map &map);
 	void mjvegasa_map(address_map &map);
 	void mjyarou_iomap(address_map &map);
@@ -292,8 +302,6 @@ private:
 	void tahjong_map(address_map &map);
 	void tontonb_iomap(address_map &map);
 
-	virtual void machine_start() override;
-
 	required_device<cpu_device> m_maincpu;
 	required_device<palette_device> m_palette;
 	required_device<ay8910_device> m_ay;
@@ -302,6 +310,7 @@ private:
 	optional_device<msm6242_device> m_rtc;
 	optional_device<generic_latch_8_device> m_soundlatch;
 	optional_memory_bank m_mainbank;
+	optional_shared_ptr<uint8_t> m_decrypted_opcodes;
 
 	// used by most games
 	uint8_t m_input_port_select;
@@ -337,6 +346,8 @@ void royalmah_state::machine_start()
 	save_item(NAME(m_rombank));
 	save_item(NAME(m_palette_base));
 	save_item(NAME(m_flip_screen));
+
+	m_palette_base = 0;
 }
 
 void royalmah_state::royalmah_palette(palette_device &palette) const
@@ -434,7 +445,7 @@ uint32_t royalmah_state::screen_update_royalmah(screen_device &screen, bitmap_rg
 		{
 			uint8_t pen = ((data2 >> 1) & 0x08) | ((data2 << 2) & 0x04) | ((data1 >> 3) & 0x02) | ((data1 >> 0) & 0x01);
 
-			bitmap.pix32(y, x) = m_palette->pen((m_palette_base << 4) | pen);
+			bitmap.pix(y, x) = m_palette->pen((m_palette_base << 4) | pen);
 
 			x = (m_flip_screen) ? x - 1 : x + 1;
 			data1 = data1 >> 1;
@@ -651,8 +662,18 @@ void royalmah_state::tahjong_map(address_map &map)
 	map(0x8000, 0xffff).writeonly().share("videoram");
 }
 
+void royalmah_state::mjyarou_map(address_map &map)
+{
+	map(0x0000, 0x6fff).rom().nopw();
+	map(0x7000, 0x77ff).ram().share("nvram");
+	map(0x7800, 0x9fff).rom();
+	map(0x8000, 0xffff).writeonly().share("videoram");
+}
 
-
+void royalmah_state::mjsenka_opcodes_map(address_map &map)
+{
+	map(0x0000, 0x9fff).rom().share(m_decrypted_opcodes);
+}
 
 void royalmah_state::royalmah_iomap(address_map &map)
 {
@@ -1112,18 +1133,13 @@ void royalmah_state::mjifb_rom_io_w(offs_t offset, uint8_t data)
 	logerror("%04X: unmapped input write at %04X = %02X\n", m_maincpu->pc(), offset,data);
 }
 
-void royalmah_state::mjifb_videoram_w(offs_t offset, uint8_t data)
-{
-	m_videoram[offset + 0x4000] = data;
-}
-
 void royalmah_state::mjifb_map(address_map &map)
 {
 	map(0x0000, 0x6fff).rom();
 	map(0x7000, 0x7fff).ram().share("nvram");
-	map(0x8000, 0xbfff).rw(FUNC(royalmah_state::mjifb_rom_io_r), FUNC(royalmah_state::mjifb_rom_io_w)).share("videoram");
-	map(0xc000, 0xffff).rom().w(FUNC(royalmah_state::mjifb_videoram_w));
-//  map(0xc000, 0xffff).rom().writeonly();  This should, but doesn't work
+	map(0x8000, 0xffff).writeonly().share("videoram");
+	map(0x8000, 0xbfff).rw(FUNC(royalmah_state::mjifb_rom_io_r), FUNC(royalmah_state::mjifb_rom_io_w));
+	map(0xc000, 0xffff).rom();
 }
 
 uint8_t royalmah_state::mjifb_p3_r()
@@ -1212,8 +1228,9 @@ void royalmah_state::mjdejavu_map(address_map &map)
 {
 	map(0x0000, 0x6fff).rom();
 	map(0x7000, 0x7fff).ram().share("nvram");
-	map(0x8000, 0xbfff).rw(FUNC(royalmah_state::mjdejavu_rom_io_r), FUNC(royalmah_state::mjdejavu_rom_io_w)).share("videoram");
-	map(0xc000, 0xffff).rom().w(FUNC(royalmah_state::mjifb_videoram_w));
+	map(0x8000, 0xffff).writeonly().share("videoram");
+	map(0x8000, 0xbfff).rw(FUNC(royalmah_state::mjdejavu_rom_io_r), FUNC(royalmah_state::mjdejavu_rom_io_w));
+	map(0xc000, 0xffff).rom();
 }
 
 
@@ -2989,11 +3006,11 @@ static INPUT_PORTS_START( mjtensin )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
 INPUT_PORTS_END
 
-static INPUT_PORTS_START( cafetime )
+static INPUT_PORTS_START( cafetime ) // dips definitions and defaults taken from MT05580, this uses 10 switch dip banks
 	PORT_INCLUDE( mjctrl2 )
 
-	PORT_START("DSW1")  /* IN11 */
-	PORT_DIPNAME( 0x0f, 0x07, "Pay Out Rate" )
+	PORT_START("DSW1")  // IN11
+	PORT_DIPNAME( 0x0f, 0x07, "Pay Out Rate" ) PORT_DIPLOCATION("SW1:1,2,3,4")
 	PORT_DIPSETTING(    0x0f, "96%" )
 	PORT_DIPSETTING(    0x0e, "93%" )
 	PORT_DIPSETTING(    0x0d, "90%" )
@@ -3010,117 +3027,117 @@ static INPUT_PORTS_START( cafetime )
 	PORT_DIPSETTING(    0x02, "56%" )
 	PORT_DIPSETTING(    0x01, "53%" )
 	PORT_DIPSETTING(    0x00, "50%" )
-	PORT_DIPNAME( 0x30, 0x00, "Maximum Bet" )
-	PORT_DIPSETTING(    0x30, "1" )
-	PORT_DIPSETTING(    0x20, "5" )
-	PORT_DIPSETTING(    0x10, "10" )
-	PORT_DIPSETTING(    0x00, "20" )
-	PORT_DIPNAME( 0xc0, 0xc0, "Unknown 1-6&7" )
+	PORT_DIPNAME( 0x30, 0x00, "Odds Rate" ) PORT_DIPLOCATION("SW1:5,6") // Yakuman - Triple - Double - Haneman - Mangan - 3 Han - 2 Han - 1 Han
+	PORT_DIPSETTING(    0x30, "32-24-16-12-8-4-2-1" )
+	PORT_DIPSETTING(    0x00, "50-30-15-8-5-3-2-1" )
+	PORT_DIPSETTING(    0x10, "100-50-25-10-5-3-2-1" )
+	PORT_DIPSETTING(    0x20, "200-100-50-10-5-3-2-1" )
+	PORT_DIPNAME( 0xc0, 0x40, "Maximum Bet" ) PORT_DIPLOCATION("SW1:7,8")
 	PORT_DIPSETTING(    0xc0, "1" )
-	PORT_DIPSETTING(    0x80, "2" )
-	PORT_DIPSETTING(    0x40, "3" )
-	PORT_DIPSETTING(    0x00, "4" )
+	PORT_DIPSETTING(    0x80, "5" )
+	PORT_DIPSETTING(    0x40, "10" )
+	PORT_DIPSETTING(    0x00, "20" )
 
-	PORT_START("DSW2")  /* IN12 */
-	PORT_DIPNAME( 0x03, 0x03, "Winnings" )
-	PORT_DIPSETTING(    0x03, "32 24 16 12 8 4 2 1" )
-	PORT_DIPSETTING(    0x00, "50 30 15 8 5 3 2 1" )
-	PORT_DIPSETTING(    0x01, "100 50 25 10 5 3 2 1" )
-	PORT_DIPSETTING(    0x02, "200 100 50 10 5 3 2 1" )
-	PORT_DIPNAME( 0x0c, 0x0c, "Unknown 2-2&3" )
+	PORT_START("DSW2")  // IN12, defaults for 'single type'
+	PORT_DIPNAME( 0x03, 0x03, DEF_STR( Coinage ) ) PORT_DIPLOCATION("SW2:1,2")
+	PORT_DIPSETTING(    0x03, DEF_STR( 1C_1C ) )
+	PORT_DIPSETTING(    0x02, DEF_STR( 1C_2C ) )
+	PORT_DIPSETTING(    0x01, DEF_STR( 1C_5C ) )
+	PORT_DIPSETTING(    0x00, "1C_10C" )
+	PORT_DIPNAME( 0x0c, 0x0c, "Minimum Rate" ) PORT_DIPLOCATION("SW2:3,4")
 	PORT_DIPSETTING(    0x0c, "1" )
 	PORT_DIPSETTING(    0x08, "2" )
 	PORT_DIPSETTING(    0x04, "3" )
 	PORT_DIPSETTING(    0x00, "5" )
-	PORT_DIPNAME( 0x70, 0x70, "Unknown 2-4&5&6" )
-	PORT_DIPSETTING(    0x70, "0" )
-	PORT_DIPSETTING(    0x60, "1" )
-	PORT_DIPSETTING(    0x50, "2" )
-	PORT_DIPSETTING(    0x40, "3" )
-	PORT_DIPSETTING(    0x30, "4" )
-	PORT_DIPSETTING(    0x20, "5" )
-	PORT_DIPSETTING(    0x10, "6" )
-	PORT_DIPSETTING(    0x00, "7" )
-	PORT_DIPNAME( 0x80, 0x80, "Unknown 2-7" )
-	PORT_DIPSETTING(    0x80, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x70, 0x40, "Yakuman Bonus" ) PORT_DIPLOCATION("SW2:5,6,7") // default for 'corner type' would be 0x20
+	PORT_DIPSETTING(    0x70, DEF_STR( No ) )
+	PORT_DIPSETTING(    0x60, "Once on Start" )
+	PORT_DIPSETTING(    0x50, "Every 300 Coins" )
+	PORT_DIPSETTING(    0x40, "Every 500 Coins" )
+	PORT_DIPSETTING(    0x30, "Every 700 Coins" )
+	PORT_DIPSETTING(    0x20, "Every 1000 Coins" )
+	PORT_DIPSETTING(    0x10, DEF_STR( Unknown ) ) // not listed on dip sheet
+	PORT_DIPSETTING(    0x00, DEF_STR( Unknown ) ) // not listed on dip sheet
+	PORT_DIPNAME( 0x80, 0x00, "Yakuman Bonus Cycle" ) PORT_DIPLOCATION("SW2:8")
+	PORT_DIPSETTING(    0x00, "Once" )
+	PORT_DIPSETTING(    0x80, "Twice" )
 
-	PORT_START("DSW3")  /* IN13 */
-	PORT_DIPNAME( 0x01, 0x01, "Unknown 3-0" )
-	PORT_DIPSETTING(    0x01, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x02, 0x02, "Unknown 3-1" )
-	PORT_DIPSETTING(    0x02, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x04, 0x04, "Unknown 3-2" )
+	PORT_START("DSW3")  // IN13
+	PORT_DIPNAME( 0x01, 0x01, "Payout Type" ) PORT_DIPLOCATION("SW3:1")
+	PORT_DIPSETTING(    0x01, "Credits" )
+	PORT_DIPSETTING(    0x00, "Hopper" )
+	PORT_DIPNAME( 0x02, 0x02, "Hopper Type" ) PORT_DIPLOCATION("SW3:2")
+	PORT_DIPSETTING(    0x02, DEF_STR( Normal ) )
+	PORT_DIPSETTING(    0x00, "Reversed" )
+	PORT_DIPNAME( 0x04, 0x00, "W-Bet" ) PORT_DIPLOCATION("SW3:3")
 	PORT_DIPSETTING(    0x04, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x08, 0x08, "Unknown 3-3" )
+	PORT_DIPNAME( 0x08, 0x00, "Renchan Rate" ) PORT_DIPLOCATION("SW3:4")
 	PORT_DIPSETTING(    0x08, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x10, 0x10, "Unknown 3-4" )
+	PORT_DIPNAME( 0x10, 0x00, "Last Chance" ) PORT_DIPLOCATION("SW3:5")
 	PORT_DIPSETTING(    0x10, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x20, 0x20, "Unknown 3-5" )
-	PORT_DIPSETTING(    0x20, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x40, 0x40, "Unknown 3-6" )
+	PORT_DIPNAME( 0x20, 0x00, "Good Time Timer" ) PORT_DIPLOCATION("SW3:6")
+	PORT_DIPSETTING(    0x00, "3 Minutes" )
+	PORT_DIPSETTING(    0x20, "5 Minutes" )
+	PORT_DIPNAME( 0x40, 0x00, "Quiz Bonus" ) PORT_DIPLOCATION("SW3:7")
 	PORT_DIPSETTING(    0x40, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x80, 0x80, "Unknown 3-7" )
-	PORT_DIPSETTING(    0x80, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x80, 0x80, "Quiz Bonus Points" ) PORT_DIPLOCATION("SW3:8")
+	PORT_DIPSETTING(    0x00, "2" )
+	PORT_DIPSETTING(    0x80, "3" )
 
-	PORT_START("DSW4")  /* IN14 */
-	PORT_DIPNAME( 0x01, 0x01, "Unknown 4-0" )
+	PORT_START("DSW4")  // IN14, defaults for 'single type'
+	PORT_DIPNAME( 0x01, 0x00, DEF_STR( Demo_Sounds ) ) PORT_DIPLOCATION("SW4:1") // Should be off for 'single type' and on for 'corner type', left on for easier regression testing
 	PORT_DIPSETTING(    0x01, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x02, 0x02, "Unknown 4-1" )
+	PORT_DIPNAME( 0x02, 0x00, "BGM during Gameplay" ) PORT_DIPLOCATION("SW4:2")
 	PORT_DIPSETTING(    0x02, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x04, 0x04, "Unknown 4-2" )
-	PORT_DIPSETTING(    0x04, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x08, 0x08, "Unknown 4-3" )
+	PORT_DIPNAME( 0x04, 0x00, "Don Den Button" )  PORT_DIPLOCATION("SW4:3") // Off for 'corner type'
+	PORT_DIPSETTING(    0x04, "Start Button" )
+	PORT_DIPSETTING(    0x00, "F/F Button" )
+	PORT_DIPNAME( 0x08, 0x00, "Auto Reach" ) PORT_DIPLOCATION("SW4:4")
 	PORT_DIPSETTING(    0x08, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x10, 0x00, "Full Test" )
+	PORT_DIPNAME( 0x10, 0x00, "Full Test" )  PORT_DIPLOCATION("SW4:5") // 4 koma comic test
 	PORT_DIPSETTING(    0x10, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x20, 0x00, "Background" )
+	PORT_DIPNAME( 0x20, 0x00, "Background" ) PORT_DIPLOCATION("SW4:6")
 	PORT_DIPSETTING(    0x20, "Black" )
 	PORT_DIPSETTING(    0x00, "Green" )
-	PORT_DIPNAME( 0x40, 0x40, "Unknown 4-6" )
+	PORT_DIPNAME( 0x40, 0x40, "Book (Stage) Select" ) PORT_DIPLOCATION("SW4:7")
 	PORT_DIPSETTING(    0x40, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x80, 0x80, "Unknown 4-7" )
+	PORT_DIPNAME( 0x80, 0x00, "Yakuman Match" ) PORT_DIPLOCATION("SW4:8")
 	PORT_DIPSETTING(    0x80, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
 
-	PORT_START("DSWTOP")    /* IN15 */
-	PORT_DIPNAME( 0x01, 0x01, "Credits Per Note" )
+	PORT_START("DSWTOP")    // IN15, actually dips 9-10 of the first 4 banks
+	PORT_DIPNAME( 0x01, 0x00, "Credits Per Note" ) PORT_DIPLOCATION("SW1:9")
 	PORT_DIPSETTING(    0x01, "5" )
 	PORT_DIPSETTING(    0x00, "10" )
-	PORT_DIPNAME( 0x02, 0x02, DEF_STR( Flip_Screen ) )
+	PORT_DIPNAME( 0x02, 0x02, DEF_STR( Flip_Screen ) ) PORT_DIPLOCATION("SW1:10")
 	PORT_DIPSETTING(    0x02, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x04, 0x04, "Unknown 2-8" )
-	PORT_DIPSETTING(    0x04, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x08, 0x08, "Unknown 2-9" )
+	PORT_DIPNAME( 0x04, 0x00, DEF_STR( Difficulty ) ) PORT_DIPLOCATION("SW2:9")
+	PORT_DIPSETTING(    0x00, DEF_STR( Normal ) )
+	PORT_DIPSETTING(    0x04, DEF_STR( Hard ) )
+	PORT_DIPNAME( 0x08, 0x08, DEF_STR( Unused ) ) PORT_DIPLOCATION("SW2:10") // listed as Unused OFF
 	PORT_DIPSETTING(    0x08, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x30, 0x30, "Unknown 3-8&9" )
-	PORT_DIPSETTING(    0x30, "0" )
-	PORT_DIPSETTING(    0x20, "1" )
-	PORT_DIPSETTING(    0x10, "2" )
-	PORT_DIPSETTING(    0x00, "3" )
-	PORT_DIPNAME( 0x40, 0x40, "Unknown 4-8" )
-	PORT_DIPSETTING(    0x40, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x80, 0x80, "Unknown 4-9" )
-	PORT_DIPSETTING(    0x80, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x30, 0x30, "Quiz Questions Table" ) PORT_DIPLOCATION("SW3:9,10")
+	PORT_DIPSETTING(    0x30, "A" )
+	PORT_DIPSETTING(    0x20, "B" )
+	PORT_DIPSETTING(    0x10, "C" )
+	PORT_DIPSETTING(    0x00, "D" )
+	PORT_DIPNAME( 0x40, 0x40, "Yakuman Match Frequency" ) PORT_DIPLOCATION("SW4:9")
+	PORT_DIPSETTING(    0x00, DEF_STR( Normal ) )
+	PORT_DIPSETTING(    0x40, "Often" )
+	PORT_DIPNAME( 0x80, 0x80, "4 Koma Comic Type" ) PORT_DIPLOCATION("SW4:10")
+	PORT_DIPSETTING(    0x00, "A" )
+	PORT_DIPSETTING(    0x80, "B" )
 INPUT_PORTS_END
 
 static INPUT_PORTS_START( ippatsu )
@@ -3570,6 +3587,13 @@ void royalmah_state::janoh(machine_config &config)
 	royalmah(config);
 	m_maincpu->set_clock(8000000/2);   /* 4 MHz ? */
 	m_maincpu->set_addrmap(AS_PROGRAM, &royalmah_state::janoh_map);
+}
+
+void royalmah_state::janoha(machine_config &config)
+{
+	royalmah(config);
+	m_maincpu->set_clock(8000000/2);   /* 4 MHz ? */
+	m_maincpu->set_addrmap(AS_PROGRAM, &royalmah_state::janoh_map);
 
 	z80_device &sub(Z80(config, "sub", 4000000));        /* 4 MHz ? */
 	sub.set_addrmap(AS_PROGRAM, &royalmah_state::janoh_sub_map);
@@ -3592,9 +3616,6 @@ void royalmah_state::jansou(machine_config &config)
 	GENERIC_LATCH_8(config, m_soundlatch);
 
 	DAC_8BIT_R2R(config, "dac", 0).add_route(ALL_OUTPUTS, "speaker", 0.25); // unknown DAC
-	voltage_regulator_device &vref(VOLTAGE_REGULATOR(config, "vref"));
-	vref.add_route(0, "dac", 1.0, DAC_VREF_POS_INPUT);
-	vref.add_route(0, "dac", -1.0, DAC_VREF_NEG_INPUT);
 }
 
 void royalmah_state::dondenmj(machine_config &config)
@@ -3636,7 +3657,14 @@ void royalmah_state::mjclub(machine_config &config)
 void royalmah_state::mjyarou(machine_config &config)
 {
 	royalmah(config);
+	m_maincpu->set_addrmap(AS_PROGRAM, &royalmah_state::mjyarou_map);
 	m_maincpu->set_addrmap(AS_IO, &royalmah_state::mjyarou_iomap);
+}
+
+void royalmah_state::mjsenka(machine_config &config)
+{
+	mjyarou(config);
+	m_maincpu->set_addrmap(AS_OPCODES, &royalmah_state::mjsenka_opcodes_map);
 }
 
 void royalmah_state::ippatsu(machine_config &config)
@@ -4986,7 +5014,7 @@ Mahjong Senka
 
 Modified Royal Mahjong Hardware
 
-CPU: Z80 <- wrong,they are 2 z80 CPUs -AS
+CPU: Z80
 Sound: AY-3-8910
 OSC: 18.432MHz
 Others: Battery
@@ -5013,11 +5041,8 @@ ROM_START( mjsenka )
 	ROM_REGION( 0x10000, "maincpu", 0 )
 	ROM_LOAD( "3",       0x0000, 0x4000, CRC(b2d8be1f) SHA1(da75e1072d271de2dbd897a551f6c32593f6421b) )
 	ROM_LOAD( "4",       0x4000, 0x2000, CRC(e9e84999) SHA1(7b5f0edd92cf3a45e85055460e6cb00b154fd152) )
-	ROM_LOAD( "2",       0x6000, 0x2000, CRC(cdb02fc5) SHA1(5de6b15b79ea7c4246a294b17f166e53be6a4abc) )
-
-	/*encrypted z80*/
-	ROM_REGION( 0x10000, "sub", 0 )
-	ROM_LOAD( "1",       0x0000, 0x2000, CRC(83e943d1) SHA1(c4f9b5036627ccb369e7db03a743e496b149af85) )
+	ROM_LOAD( "1",       0x6000, 0x2000, CRC(83e943d1) SHA1(c4f9b5036627ccb369e7db03a743e496b149af85) )
+	ROM_LOAD( "2",       0x8000, 0x2000, CRC(cdb02fc5) SHA1(5de6b15b79ea7c4246a294b17f166e53be6a4abc) )
 
 	ROM_REGION( 0x0040, "proms", 0 )
 	ROM_LOAD( "4.8k",  0x0000, 0x0020, CRC(41bd4d69) SHA1(4d2da761b338b62b2ea151c201063a24d6e4cc97) )
@@ -5339,6 +5364,60 @@ void royalmah_state::init_janptr96()
 	membank("rambank")->configure_entries(0, 8, m_janptr96_nvram.get() + 0x1000, 0x1000);
 }
 
+void royalmah_state::init_mjsenka()
+{
+	uint8_t *rom = memregion("maincpu")->base();
+
+	for (int i = 0x0000; i < 0xa000; i++)
+		m_decrypted_opcodes[i] = rom[i];
+
+	for (int i = 0x6000; i < 0x8000; i++)
+	{
+		switch (i & 0x15)
+		{
+			case 0x00: m_decrypted_opcodes[i] ^= 0x03; break;
+			case 0x01: m_decrypted_opcodes[i] ^= 0x07; break;
+			case 0x04: m_decrypted_opcodes[i] ^= 0x01; break;
+			case 0x05: m_decrypted_opcodes[i] ^= 0x05; break;
+			case 0x10: m_decrypted_opcodes[i] ^= 0x02; break;
+			case 0x11: m_decrypted_opcodes[i] ^= 0x06; break;
+			case 0x14: m_decrypted_opcodes[i] ^= 0x00; break;
+			case 0x15: m_decrypted_opcodes[i] ^= 0x04; break;
+		}
+
+		if (i & 0x02)
+			m_decrypted_opcodes[i] ^= 0x80;
+
+		m_decrypted_opcodes[i] = bitswap<8>(m_decrypted_opcodes[i], 2, 6, 5, 4, 3, 0, 7, 1);
+	}
+
+	for (int i = 0x6000; i < 0x8000; i++)
+	{
+		switch (i & 0x0e)
+		{
+			case 0x00: rom[i] ^= 0x01; break;
+			case 0x02: rom[i] ^= 0x03; break;
+			case 0x04: rom[i] ^= 0x05; break;
+			case 0x06: rom[i] ^= 0x07; break;
+			case 0x08: rom[i] ^= 0x00; break;
+			case 0x0a: rom[i] ^= 0x02; break;
+			case 0x0c: rom[i] ^= 0x04; break;
+			case 0x0e: rom[i] ^= 0x06; break;
+		}
+
+		if ((i & 0x01) == 0x00)
+			rom[i] ^= 0x80;
+
+		rom[i] = bitswap<8>(rom[i], 0, 6, 5, 4, 3, 1, 2, 7);
+	}
+}
+
+void royalmah_state::init_mjsiyoub()
+{
+	m_mainbank->set_base(memregion("maincpu")->base() + 0x8000);
+}
+
+} // Anonymous namespace
 
 
 // the original Janputer (Sanritsu) is not yet dumped, basically Royal Mahjong but non-BET type
@@ -5351,8 +5430,8 @@ GAME( 1983,  janyoup2, royalmj,  janyoup2, janyoup2, royalmah_state, empty_init,
 GAME( 1985,  tahjong,  royalmj,  tahjong,  tahjong,  royalmah_state, init_tahjong,  ROT0,   "Bally Pond / Nasco",         "Tahjong Yakitori (ver. 2-1)",           0 ) // 1985 Jun. 17
 GAME( 1981,  janputer, 0,        royalmah, royalmah, royalmah_state, empty_init,    ROT0,   "bootleg (Paradise Denshi Ltd. / Mes)", "New Double Bet Mahjong (bootleg of Royal Mahjong) [BET]", 0 ) // MT #05392
 GAME( 1984,  rkjanoh2, 0,        royalmah, royalmah, royalmah_state, empty_init,    ROT0,   "SNK / Dyna Corp",            "Royal King Jang Oh 2 (v4.00 1984 Jun 10th)", MACHINE_NOT_WORKING )
-GAME( 1984,  janoh,    0,        royalmah, royalmah, royalmah_state, empty_init,    ROT0,   "Toaplan",                    "Jan Oh (set 1)",                        MACHINE_NOT_WORKING )
-GAME( 1984,  janoha,   janoh,    janoh,    royalmah, royalmah_state, empty_init,    ROT0,   "Toaplan",                    "Jan Oh (set 2)",                        MACHINE_NOT_WORKING ) // this one is complete?
+GAME( 1984,  janoh,    0,        janoh,    royalmah, royalmah_state, empty_init,    ROT0,   "Toaplan",                    "Jan Oh (set 1)",                        MACHINE_NOT_WORKING )
+GAME( 1984,  janoha,   janoh,    janoha,   royalmah, royalmah_state, empty_init,    ROT0,   "Toaplan",                    "Jan Oh (set 2)",                        MACHINE_NOT_WORKING ) // this one is complete?
 GAME( 1985,  jansou,   0,        jansou,   jansou,   royalmah_state, init_jansou,   ROT0,   "Dyna Computer",              "Jansou (set 1)",                        MACHINE_NOT_WORKING|MACHINE_NO_SOUND )
 GAME( 1985,  jansoua,  jansou,   jansou,   jansou,   royalmah_state, init_jansou,   ROT0,   "Dyna Computer",              "Jansou (V 1.1)",                        0 )
 GAME( 1986,  jangtaku, 0,        jansou,   jansou,   royalmah_state, init_jansou,   ROT0,   "Dyna Computer",              "Jang Taku (V 1.3)",                     0 )
@@ -5360,8 +5439,8 @@ GAME( 1986,  dondenmj, 0,        dondenmj, majs101b, royalmah_state, init_dynax,
 GAME( 1986,  ippatsu,  0,        ippatsu,  ippatsu,  royalmah_state, init_ippatsu,  ROT0,   "Public Software / Paradais", "Ippatsu Gyakuten [BET] (Japan)",        0 )
 GAME( 1986,  suzume,   0,        suzume,   suzume,   royalmah_state, init_suzume,   ROT0,   "Dyna Electronics",           "Watashiha Suzumechan (Japan)",          0 )
 GAME( 1986,  jongshin, 0,        jongshin, jongshin, royalmah_state, init_jongshin, ROT0,   "Dyna Electronics",           "Jong Shin (Japan)",                     0 )
-GAME( 1986,  mjsiyoub, 0,        royalmah, royalmah, royalmah_state, empty_init,    ROT0,   "Visco",                      "Mahjong Shiyou (Japan)",                MACHINE_NOT_WORKING )
-GAME( 1986,  mjsenka,  0,        royalmah, royalmah, royalmah_state, empty_init,    ROT0,   "Visco",                      "Mahjong Senka (Japan)",                 MACHINE_NOT_WORKING )
+GAME( 1986,  mjsiyoub, 0,        royalmah, royalmah, royalmah_state, init_mjsiyoub, ROT0,   "Visco",                      "Mahjong Shiyou (Japan)",                MACHINE_NOT_WORKING )
+GAME( 1986,  mjsenka,  0,        mjsenka,  mjyarou,  royalmah_state, init_mjsenka,  ROT0,   "Visco",                      "Mahjong Senka (Japan)",                 MACHINE_NOT_WORKING ) // heavy GFX glitches, wrong palette decode, code flow doesn't seem totally correct
 GAME( 1986,  mjyarou,  0,        mjyarou,  mjyarou,  royalmah_state, empty_init,    ROT0,   "Visco / Video System",       "Mahjong Yarou [BET] (Japan, set 1)",    MACHINE_IMPERFECT_GRAPHICS ) // girls aren't shown
 GAME( 1986,  mjyarou2, mjyarou,  mjyarou,  mjyarou,  royalmah_state, empty_init,    ROT0,   "Visco / Video System",       "Mahjong Yarou [BET] (Japan, set 2)",    MACHINE_IMPERFECT_GRAPHICS ) // girls aren't shown
 GAME( 1986?, mjclub,   0,        mjclub,   mjclub,   royalmah_state, init_tontonb,  ROT0,   "Xex",                        "Mahjong Club [BET] (Japan)",            0 )

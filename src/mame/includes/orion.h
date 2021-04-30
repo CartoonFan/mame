@@ -85,14 +85,8 @@ protected:
 	uint8_t orion_romdisk_porta_r();
 	void orion_romdisk_portb_w(uint8_t data);
 	void orion_romdisk_portc_w(uint8_t data);
-	DECLARE_FLOPPY_FORMATS( orion_floppy_formats );
-
-	void orion128_io(address_map &map);
-	void orion128_mem(address_map &map);
-	void orionpro_io(address_map &map);
-	void orionpro_mem(address_map &map);
-	void orionz80_io(address_map &map);
-	void orionz80_mem(address_map &map);
+	static void orion_floppy_formats(format_registration &fr);
+	void machine_start() override;
 
 	uint8_t m_orion128_video_mode;
 	uint8_t m_orion128_video_page;
@@ -135,8 +129,11 @@ protected:
 	void orionz80_switch_bank();
 	void orion_set_video_mode(int width);
 	void orionpro_bank_switch();
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+
+private:
+	void machine_reset() override;
+	void io_map(address_map &map);
+	void mem_map(address_map &map);
 };
 
 class orion_z80_state : public orion_state
@@ -149,9 +146,10 @@ public:
 	void orionz80(machine_config &config);
 	void orionz80ms(machine_config &config);
 
-protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+private:
+	void machine_reset() override;
+	void io_map(address_map &map);
+	void mem_map(address_map &map);
 };
 
 class orion_pro_state : public orion_state
@@ -163,8 +161,10 @@ public:
 
 	void orionpro(machine_config &config);
 
-protected:
-	virtual void machine_reset() override;
+private:
+	void machine_reset() override;
+	void io_map(address_map &map);
+	void mem_map(address_map &map);
 };
 
 #endif // MAME_INCLUDES_ORION_H

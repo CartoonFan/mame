@@ -3561,11 +3561,11 @@ void mips3_device::handle_special(uint32_t op)
 			m_core->icount -= 35;
 			break;
 		case 0x1c:  /* DMULT */
-			LOVAL64 = mul_64x64(RSVAL64, RTVAL64, reinterpret_cast<s64 *>(&HIVAL64));
+			LOVAL64 = mul_64x64(RSVAL64, RTVAL64, *reinterpret_cast<s64 *>(&HIVAL64));
 			m_core->icount -= 7;
 			break;
 		case 0x1d:  /* DMULTU */
-			LOVAL64 = mulu_64x64(RSVAL64, RTVAL64, &HIVAL64);
+			LOVAL64 = mulu_64x64(RSVAL64, RTVAL64, HIVAL64);
 			m_core->icount -= 7;
 			break;
 		case 0x1e:  /* DDIV */
@@ -5044,11 +5044,6 @@ void r5900le_device::handle_sdc2(uint32_t op)
 	}
 }
 
-void mips3_device::burn_cycles(int32_t cycles)
-{
-	execute_burn(cycles);
-}
-
 #if ENABLE_O2_DPRINTF
 #include "o2dprintf.hxx"
 #endif
@@ -5216,6 +5211,7 @@ void mips3_device::execute_run()
 						machine().debug_break();
 					break;
 				}
+				[[fallthrough]];
 			case 0x31:  /* LWC1 */
 				if (!(SR & SR_COP1))
 				{
@@ -5238,16 +5234,17 @@ void mips3_device::execute_run()
 						machine().debug_break();
 					break;
 				}
+				[[fallthrough]];
 			case 0x35:  /* LDC1 */
-			if (!(SR & SR_COP1))
-			{
-				m_badcop_value = 1;
-				generate_exception(EXCEPTION_BADCOP, 1);
+				if (!(SR & SR_COP1))
+				{
+					m_badcop_value = 1;
+					generate_exception(EXCEPTION_BADCOP, 1);
+					break;
+				}
+				if (RDOUBLE(SIMMVAL+RSVAL32, &temp64))
+					set_cop1_reg64(RTREG, temp64);
 				break;
-			}
-			if (RDOUBLE(SIMMVAL+RSVAL32, &temp64))
-				set_cop1_reg64(RTREG, temp64);
-			break;
 			case 0x36:  handle_ldc2(op); break;
 			case 0x37:  /* LD */        if (RDOUBLE(SIMMVAL+RSVAL32, &temp64) && RTREG) RTVAL64 = temp64;       break;
 			case 0x38:  /* SC */

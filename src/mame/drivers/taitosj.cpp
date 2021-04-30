@@ -179,7 +179,7 @@ void taitosj_state::taitosj_sndnmi_msk_w(uint8_t data)
 	m_soundnmi->in_w<0>((~data)&1);
 }
 
-WRITE8_MEMBER(taitosj_state::soundlatch_w)
+void taitosj_state::soundlatch_w(uint8_t data)
 {
 	machine().scheduler().synchronize(timer_expired_delegate(FUNC(taitosj_state::soundlatch_w_cb), this), data);
 }
@@ -191,7 +191,7 @@ void taitosj_state::input_port_4_f0_w(uint8_t data)
 }
 
 // EPORT2
-WRITE8_MEMBER(taitosj_state::sound_semaphore2_w)
+void taitosj_state::sound_semaphore2_w(uint8_t data)
 {
 	machine().scheduler().synchronize(timer_expired_delegate(FUNC(taitosj_state::sound_semaphore2_w_cb), this), data);
 }
@@ -341,7 +341,7 @@ TIMER_CALLBACK_MEMBER(taitosj_state::sound_semaphore2_clear_w_cb)
 }
 
 // RD5000
-READ8_MEMBER(taitosj_state::soundlatch_r)
+uint8_t taitosj_state::soundlatch_r()
 {
 	if (!machine().side_effects_disabled())
 	{
@@ -352,19 +352,19 @@ READ8_MEMBER(taitosj_state::soundlatch_r)
 }
 
 // RD5001
-READ8_MEMBER(taitosj_state::soundlatch_flags_r)
+uint8_t taitosj_state::soundlatch_flags_r()
 {
 	return (m_soundlatch_flag?8:0) | (m_sound_semaphore2?4:0) | 3;
 }
 
 // WR5000
-WRITE8_MEMBER(taitosj_state::soundlatch_clear7_w)
+void taitosj_state::soundlatch_clear7_w(uint8_t data)
 {
 	machine().scheduler().synchronize(timer_expired_delegate(FUNC(taitosj_state::soundlatch_clear7_w_cb), this), data);
 }
 
 // WR5001
-WRITE8_MEMBER(taitosj_state::sound_semaphore2_clear_w)
+void taitosj_state::sound_semaphore2_clear_w(uint8_t data)
 {
 	machine().scheduler().synchronize(timer_expired_delegate(FUNC(taitosj_state::sound_semaphore2_clear_w_cb), this), data);
 }
@@ -1486,13 +1486,12 @@ static INPUT_PORTS_START( sfposeid )
 	PORT_BIT( 0xf0, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(taitosj_state, input_port_4_f0_r)    // from sound CPU
 
 	PORT_START("DSW1")
-	PORT_DIPNAME( 0x01, 0x01, DEF_STR( Unknown ) )         PORT_DIPLOCATION("SWA:1")
-	PORT_DIPSETTING(    0x01, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x02, 0x02, DEF_STR( Unknown ) )         PORT_DIPLOCATION("SWA:2")
-	PORT_DIPSETTING(    0x02, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x04, 0x04, DEF_STR( Unknown ) )         PORT_DIPLOCATION("SWA:3")
+	PORT_DIPNAME( 0x03, 0x02, DEF_STR( Bonus_Life ) )      PORT_DIPLOCATION("SWA:1,2")
+	PORT_DIPSETTING(    0x00, "5000" )
+	PORT_DIPSETTING(    0x01, "10000" )
+	PORT_DIPSETTING(    0x02, "15000" )
+	PORT_DIPSETTING(    0x03, "20000" )
+	PORT_DIPNAME( 0x04, 0x04, DEF_STR( Unused ) )          PORT_DIPLOCATION("SWA:3") // Marked as normal OFF on dip sheet
 	PORT_DIPSETTING(    0x04, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
 	PORT_DIPNAME( 0x18, 0x08, DEF_STR( Lives ) )           PORT_DIPLOCATION("SWA:4,5")
@@ -1500,7 +1499,7 @@ static INPUT_PORTS_START( sfposeid )
 	PORT_DIPSETTING(    0x08, "3" )
 	PORT_DIPSETTING(    0x10, "4" )
 	PORT_DIPSETTING(    0x18, "5" )
-	PORT_DIPNAME( 0x20, 0x20, DEF_STR( Unknown ) )         PORT_DIPLOCATION("SWA:6")
+	PORT_DIPNAME( 0x20, 0x20, DEF_STR( Unused ) )          PORT_DIPLOCATION("SWA:6") // Marked as normal OFF on dip sheet
 	PORT_DIPSETTING(    0x20, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
 	PORT_DIPNAME( 0x40, 0x40, DEF_STR( Flip_Screen ) )     PORT_DIPLOCATION("SWA:7")
@@ -1514,16 +1513,15 @@ static INPUT_PORTS_START( sfposeid )
 	DSW2_PORT
 
 	PORT_START("DSW3")
-	PORT_DIPNAME( 0x01, 0x01, DEF_STR( Unknown ) )         PORT_DIPLOCATION("SWC:1")
-	PORT_DIPSETTING(    0x01, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x02, 0x02, DEF_STR( Unknown ) )         PORT_DIPLOCATION("SWC:2")
-	PORT_DIPSETTING(    0x02, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x04, 0x04, DEF_STR( Unknown ) )         PORT_DIPLOCATION("SWC:3")
+	PORT_DIPNAME( 0x03, 0x00, "Weapons Range" )            PORT_DIPLOCATION("SWC:1,2") // Can't spot any different behaviour in-game, but dip sheet says so.
+	PORT_DIPSETTING(    0x03, "Short" )
+	PORT_DIPSETTING(    0x02, DEF_STR( Medium ) )
+	PORT_DIPSETTING(    0x01, "Long" )
+	PORT_DIPSETTING(    0x00, "Longest" )
+	PORT_DIPNAME( 0x04, 0x04, DEF_STR( Unused ) )          PORT_DIPLOCATION("SWC:3") // Marked as normal OFF on dip sheet
 	PORT_DIPSETTING(    0x04, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x08, 0x08, DEF_STR( Unknown ) )         PORT_DIPLOCATION("SWC:4")
+	PORT_DIPNAME( 0x08, 0x08, DEF_STR( Unused ) )          PORT_DIPLOCATION("SWC:4") // Marked as normal OFF on dip sheet
 	PORT_DIPSETTING(    0x08, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
 	PORT_DIPNAME( 0x10, 0x10, "Coinage Display" )          PORT_DIPLOCATION("SWC:5")
@@ -1842,8 +1840,8 @@ void taitosj_state::nomcu(machine_config &config)
 
 	DAC_8BIT_R2R(config, m_dac, 0).add_route(ALL_OUTPUTS, "speaker", 0.15); // 30k r-2r network
 	DISCRETE(config, m_dacvol, taitosj_dacvol_discrete);
-	m_dacvol->add_route(0, "dac", 1.0, DAC_VREF_POS_INPUT);
-	m_dacvol->add_route(0, "dac", -1.0, DAC_VREF_NEG_INPUT);
+	m_dacvol->add_route(0, "dac", 1.0, DAC_INPUT_RANGE_HI);
+	m_dacvol->add_route(0, "dac", -1.0, DAC_INPUT_RANGE_LO);
 }
 
 
@@ -2851,7 +2849,7 @@ void taitosj_state::init_spacecr()
 	init_common();
 
 	/* install protection handler */
-	m_maincpu->space(AS_PROGRAM).install_read_handler(0xd48b, 0xd48b, read8_delegate(*this, FUNC(taitosj_state::spacecr_prot_r)));
+	m_maincpu->space(AS_PROGRAM).install_read_handler(0xd48b, 0xd48b, read8smo_delegate(*this, FUNC(taitosj_state::spacecr_prot_r)));
 }
 
 void taitosj_state::init_alpine()
@@ -2859,8 +2857,8 @@ void taitosj_state::init_alpine()
 	init_common();
 
 	/* install protection handlers */
-	m_maincpu->space(AS_PROGRAM).install_read_handler(0xd40b, 0xd40b, read8_delegate(*this, FUNC(taitosj_state::alpine_port_2_r)));
-	m_maincpu->space(AS_PROGRAM).install_write_handler(0xd50f, 0xd50f, write8_delegate(*this, FUNC(taitosj_state::alpine_protection_w)));
+	m_maincpu->space(AS_PROGRAM).install_read_handler(0xd40b, 0xd40b, read8smo_delegate(*this, FUNC(taitosj_state::alpine_port_2_r)));
+	m_maincpu->space(AS_PROGRAM).install_write_handler(0xd50f, 0xd50f, write8smo_delegate(*this, FUNC(taitosj_state::alpine_protection_w)));
 }
 
 void taitosj_state::init_alpinea()
@@ -2868,8 +2866,8 @@ void taitosj_state::init_alpinea()
 	init_common();
 
 	/* install protection handlers */
-	m_maincpu->space(AS_PROGRAM).install_read_handler(0xd40b, 0xd40b, read8_delegate(*this, FUNC(taitosj_state::alpine_port_2_r)));
-	m_maincpu->space(AS_PROGRAM).install_write_handler(0xd50e, 0xd50e, write8_delegate(*this, FUNC(taitosj_state::alpinea_bankswitch_w)));
+	m_maincpu->space(AS_PROGRAM).install_read_handler(0xd40b, 0xd40b, read8smo_delegate(*this, FUNC(taitosj_state::alpine_port_2_r)));
+	m_maincpu->space(AS_PROGRAM).install_write_handler(0xd50e, 0xd50e, write8smo_delegate(*this, FUNC(taitosj_state::alpinea_bankswitch_w)));
 }
 
 void taitosj_state::init_junglhbr()
@@ -2877,7 +2875,7 @@ void taitosj_state::init_junglhbr()
 	init_common();
 
 	/* inverter on bits 0 and 1 */
-	m_maincpu->space(AS_PROGRAM).install_write_handler(0x9000, 0xbfff, write8_delegate(*this, FUNC(taitosj_state::junglhbr_characterram_w)));
+	m_maincpu->space(AS_PROGRAM).install_write_handler(0x9000, 0xbfff, write8sm_delegate(*this, FUNC(taitosj_state::junglhbr_characterram_w)));
 }
 
 GAME( 1981, spaceskr,  0,        nomcu,    spaceskr, taitosj_state, init_taitosj, ROT0,   "Taito Corporation",         "Space Seeker", MACHINE_SUPPORTS_SAVE )

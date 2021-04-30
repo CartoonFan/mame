@@ -305,6 +305,8 @@ uint8_t bq4847_device::read(offs_t address)
 		set_register(reg_flags, 0xff, false);
 		m_interrupt_cb(intrq_r());
 	}
+	else
+		if (regnum == reg_unused) value = 0;  // Reg 15 is locked to 0 in BQ4847
 
 	LOGMASKED(LOG_REG, "Reg %d -> %02x\n", regnum, value);
 
@@ -535,7 +537,6 @@ void bq4847_device::nvram_default()
 void bq4847_device::nvram_read(emu_file &file)
 {
 	file.read(m_reg, 16);
-	// get_system_time();
 	transfer_to_access();
 
 	// Clear the saved flags

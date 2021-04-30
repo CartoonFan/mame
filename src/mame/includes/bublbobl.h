@@ -6,10 +6,11 @@
 #pragma once
 
 #include "cpu/m6805/m68705.h"
+#include "cpu/mcs48/mcs48.h"
 #include "machine/input_merger.h"
 #include "machine/gen_latch.h"
-#include "sound/2203intf.h"
-#include "sound/3526intf.h"
+#include "sound/ym2203.h"
+#include "sound/ym3526.h"
 #include "emupal.h"
 #include "screen.h"
 
@@ -98,6 +99,7 @@ public:
 	uint8_t tokiob_mcu_r();
 	void bublbobl_soundcpu_reset_w(uint8_t data);
 	uint8_t common_sound_semaphores_r();
+	IRQ_CALLBACK_MEMBER(mcram_vect_r);
 	uint8_t bublbobl_mcu_ddr1_r();
 	void bublbobl_mcu_ddr1_w(uint8_t data);
 	uint8_t bublbobl_mcu_ddr2_r();
@@ -185,6 +187,22 @@ protected:
 	uint8_t     m_port_b_out;
 	uint16_t    m_address;
 	uint8_t     m_latch;
+};
+
+
+class bub8749_state : public bublbobl_state
+{
+public:
+	bub8749_state(const machine_config &mconfig, device_type type, const char *tag)
+		: bublbobl_state(mconfig, type, tag)
+		, m_mcu(*this, "mcu")
+	{
+	}
+
+	void bub8749(machine_config &config);
+
+protected:
+	required_device<i8749_device> m_mcu;
 };
 
 #endif // MAME_INCLUDES_BUBLBOBL_H

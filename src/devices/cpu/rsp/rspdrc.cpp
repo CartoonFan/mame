@@ -91,7 +91,7 @@ inline void rsp_device::load_fast_iregs(drcuml_block &block)
 {
 	int regnum;
 
-	for (regnum = 0; regnum < ARRAY_LENGTH(m_regmap); regnum++)
+	for (regnum = 0; regnum < std::size(m_regmap); regnum++)
 		if (m_regmap[regnum].is_int_register())
 			UML_MOV(block, ireg(m_regmap[regnum].ireg() - REG_I0), mem(&m_rsp_state->r[regnum]));
 }
@@ -106,7 +106,7 @@ inline void rsp_device::save_fast_iregs(drcuml_block &block)
 {
 	int regnum;
 
-	for (regnum = 0; regnum < ARRAY_LENGTH(m_regmap); regnum++)
+	for (regnum = 0; regnum < std::size(m_regmap); regnum++)
 		if (m_regmap[regnum].is_int_register())
 			UML_MOV(block, mem(&m_rsp_state->r[regnum]), ireg(m_regmap[regnum].ireg() - REG_I0));
 }
@@ -142,7 +142,7 @@ inline void rsp_device::ccfunc_read32()
 
 static void cfunc_read32(void *param)
 {
-	((rsp_device *)param)->ccfunc_read32();;
+	((rsp_device *)param)->ccfunc_read32();
 }
 
 inline void rsp_device::ccfunc_write8()
@@ -152,7 +152,7 @@ inline void rsp_device::ccfunc_write8()
 
 static void cfunc_write8(void *param)
 {
-	((rsp_device *)param)->ccfunc_write8();;
+	((rsp_device *)param)->ccfunc_write8();
 }
 
 inline void rsp_device::ccfunc_write16()
@@ -162,7 +162,7 @@ inline void rsp_device::ccfunc_write16()
 
 static void cfunc_write16(void *param)
 {
-	((rsp_device *)param)->ccfunc_write16();;
+	((rsp_device *)param)->ccfunc_write16();
 }
 
 inline void rsp_device::ccfunc_write32()
@@ -172,7 +172,7 @@ inline void rsp_device::ccfunc_write32()
 
 static void cfunc_write32(void *param)
 {
-	((rsp_device *)param)->ccfunc_write32();;
+	((rsp_device *)param)->ccfunc_write32();
 }
 
 /*****************************************************************************/

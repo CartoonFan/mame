@@ -44,6 +44,7 @@ public:
 		, m_maincpu(*this, "maincpu")
 		, m_rom(*this, "maincpu")
 		, m_ram(*this, "mainram")
+		, m_bank1(*this, "bank1")
 		, m_fdc(*this, "fdc")
 		, m_floppy0(*this, "fdc:0")
 	{ }
@@ -62,10 +63,10 @@ private:
 	void io_map(address_map &map);
 	void mem_map(address_map &map);
 
-	bool m_rom_in_map;
 	required_device<cpu_device> m_maincpu;
 	required_region_ptr<u8> m_rom;
 	required_shared_ptr<u8> m_ram;
+	required_memory_bank    m_bank1;
 	required_device<fd1793_device> m_fdc;
 	required_device<floppy_connector> m_floppy0;
 };
@@ -102,13 +103,13 @@ void dmax8000_state::port14_w(u8 data)
 
 void dmax8000_state::port40_w(u8 data)
 {
-	m_rom_in_map = BIT(~data, 0);
+	m_bank1->set_entry(BIT(~data, 0));
 }
 
 void dmax8000_state::mem_map(address_map &map)
 {
-	map(0x0000, 0x0fff).ram().share("mainram").lr8(NAME([this] (offs_t offset) { if(m_rom_in_map) return m_rom[offset]; else return m_ram[offset]; }));
-	map(0x1000, 0xffff).ram();
+	map(0x0000, 0xffff).ram().share("mainram");
+	map(0x0000, 0x0fff).bankr("bank1");
 }
 
 void dmax8000_state::io_map(address_map &map)
@@ -135,13 +136,14 @@ INPUT_PORTS_END
 
 void dmax8000_state::machine_reset()
 {
-	m_rom_in_map = 1;
+	m_bank1->set_entry(1);
 	m_maincpu->set_input_line_vector(0, 0xee); // Z80 - fdc vector
 }
 
 void dmax8000_state::machine_start()
 {
-	save_item(NAME(m_rom_in_map));
+	m_bank1->configure_entry(0, m_ram);
+	m_bank1->configure_entry(1, m_rom);
 }
 
 static void floppies(device_slot_interface &device)
@@ -190,7 +192,7 @@ void dmax8000_state::dmax8000(machine_config &config)
 	FD1793(config, m_fdc, 2'000'000); // no idea
 	m_fdc->intrq_wr_callback().set_inputline(m_maincpu, INPUT_LINE_IRQ0);
 	m_fdc->drq_wr_callback().set(FUNC(dmax8000_state::fdc_drq_w));
-	FLOPPY_CONNECTOR(config, "fdc:0", floppies, "8dsdd", floppy_image_device::default_floppy_formats).enable_sound(true);
+	FLOPPY_CONNECTOR(config, "fdc:0", floppies, "8dsdd", floppy_image_device::default_mfm_floppy_formats).enable_sound(true);
 
 	MM58174(config, "rtc", 0);
 }

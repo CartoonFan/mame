@@ -249,7 +249,7 @@ uint32_t mt32_state::screen_update(screen_device &screen, bitmap_ind16 &bitmap, 
 		for(int y=0; y<8; y++) {
 			uint8_t v = data[c*8+y];
 			for(int x=0; x<5; x++)
-				bitmap.pix16(y == 7 ? 8 : y, c*6+x) = v & (0x10 >> x) ? 1 : 0;
+				bitmap.pix(y == 7 ? 8 : y, c*6+x) = v & (0x10 >> x) ? 1 : 0;
 		}
 	return 0;
 }
@@ -403,6 +403,11 @@ ROM_START( mt32 )
 	ROM_SYSTEM_BIOS( 5, "m9", "M9 enhanced firmware" )
 	ROMX_LOAD(       "a__m-9.27c256.ic27.bin",       0,   0x8000, CRC(c078ab00) SHA1(381e4208c0211a9a24a3a1b06a36760a1940ea6b), ROM_BIOS(5) | ROM_SKIP(1) )
 	ROMX_LOAD(       "b__m-9.27c256.ic26.bin",       1,   0x8000, CRC(e9c439c4) SHA1(36fece02eddd84230a7cf32f931c94dd14adbf2c), ROM_BIOS(5) | ROM_SKIP(1) )
+
+	// Dumped from "new" board revision single 128K x 8 ROM
+	ROM_SYSTEM_BIOS( 6, "204", "Firmware 2.0.4" )
+	ROMX_LOAD(       "mt32_2.0.4.ic28",              0,   0x10000, CRC(59a49d5c) SHA1(2c16432b6c73dd2a3947cba950a0f4c19d6180eb), ROM_BIOS(6) )
+	ROM_IGNORE(0x10000)  // banking needs to be implemented
 
 // We need a bios-like selection for these too
 	ROM_REGION( 0x80000, "la32", 0 )

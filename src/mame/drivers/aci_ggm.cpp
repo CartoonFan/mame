@@ -45,15 +45,15 @@ TODO:
 ******************************************************************************/
 
 #include "emu.h"
+
+#include "bus/generic/slot.h"
+#include "bus/generic/carts.h"
 #include "cpu/m6502/m6502.h"
 #include "machine/6522via.h"
 #include "machine/nvram.h"
 #include "machine/timer.h"
-#include "video/pwm.h"
 #include "sound/dac.h"
-#include "sound/volt_reg.h"
-#include "bus/generic/slot.h"
-#include "bus/generic/carts.h"
+#include "video/pwm.h"
 
 #include "speaker.h"
 #include "softlist.h"
@@ -71,6 +71,7 @@ public:
 		driver_device(mconfig, type, tag),
 		m_maincpu(*this, "maincpu"),
 		m_via(*this, "via"),
+		m_extram(*this, "extram", 0x800, ENDIANNESS_LITTLE),
 		m_display(*this, "display"),
 		m_dac(*this, "dac"),
 		m_cart(*this, "cartslot"),
@@ -91,6 +92,7 @@ private:
 	// devices/pointers
 	required_device<cpu_device> m_maincpu;
 	required_device<via6522_device> m_via;
+	memory_share_creator<u8> m_extram;
 	required_device<pwm_display_device> m_display;
 	required_device<dac_bit_interface> m_dac;
 	required_device<generic_slot_device> m_cart;
@@ -171,12 +173,13 @@ DEVICE_IMAGE_LOAD_MEMBER(ggm_state::cartridge)
 	m_cart->rom_alloc(size, GENERIC_ROM8_WIDTH, ENDIANNESS_LITTLE);
 	m_cart->common_load_rom(m_cart->get_rom_base(), size, "rom");
 
-	// keypad overlay (will return 0 if it's not defined)
-	m_overlay = strtoul(image.get_feature("overlay"), nullptr, 0) & 0xf;
+	// keypad overlay
+	const char *overlay = image.get_feature("overlay");
+	m_overlay = overlay ? strtoul(overlay, nullptr, 0) & 0xf : 0;
 
 	// extra ram (optional)
 	if (image.get_feature("ram"))
-		m_maincpu->space(AS_PROGRAM).install_ram(0x0800, 0x0fff, nullptr);
+		m_maincpu->space(AS_PROGRAM).install_ram(0x0800, 0x0fff, m_extram);
 
 	return image_init_result::PASS;
 }
@@ -418,7 +421,7 @@ void ggm_state::ggm(machine_config &config)
 	M6502(config, m_maincpu, 2000000);
 	m_maincpu->set_addrmap(AS_PROGRAM, &ggm_state::main_map);
 
-	VIA6522(config, m_via, 2000000); // DDRA = 0xff, DDRB = 0x81
+	MOS6522(config, m_via, 2000000); // DDRA = 0xff, DDRB = 0x81
 	m_via->writepa_handler().set(FUNC(ggm_state::select_w));
 	m_via->writepb_handler().set(FUNC(ggm_state::control_w));
 	m_via->readpb_handler().set(FUNC(ggm_state::input_r));
@@ -438,7 +441,6 @@ void ggm_state::ggm(machine_config &config)
 	/* sound hardware */
 	SPEAKER(config, "speaker").front_center();
 	DAC_1BIT(config, m_dac).add_route(ALL_OUTPUTS, "speaker", 0.25);
-	VOLTAGE_REGULATOR(config, "vref").add_route(0, "dac", 1.0, DAC_VREF_POS_INPUT);
 
 	/* cartridge */
 	GENERIC_CARTSLOT(config, m_cart, generic_plain_slot, "ggm");
